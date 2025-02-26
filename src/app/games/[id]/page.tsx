@@ -1,7 +1,7 @@
 "use client";
 
 import ChessGame from "@/components/ChessGame";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { fetchGameById } from "@/services/gameService";
 import { fetchUserById } from "@/services/userService";
 import { useParams } from "next/navigation";
@@ -17,12 +17,17 @@ export default function GamePage() {
   const [playerOneName, setPlayerOneName] = useState<string>("");
   const [playerTwoName, setPlayerTwoName] = useState<string>("");
 
+  const lastPgn = useRef<string | null>(null);
+
   useEffect(() => {
     if (!id) return;
 
     fetchGameById(id)
       .then(async (data: Game) => {
-        setGame(data);
+        if (lastPgn.current !== data.pgn) {
+          setGame(data);
+          lastPgn.current = data.pgn;
+        }
 
         const playerOne = await fetchUserById(data.playerOne._id);
         const playerTwo = await fetchUserById(data.playerTwo._id);
@@ -30,12 +35,16 @@ export default function GamePage() {
         setPlayerOneName(playerOne.name);
         setPlayerTwoName(playerTwo.name);
 
-        console.log(playerOne.name);
-        console.log(playerTwo.name);
+        console.log("Fetched game:", data);
       })
       .catch((error) => console.error("Error fetching game:", error))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const chessBoard = useMemo(() => {
+    if (!game?.pgn) return null;
+    return <ChessGame pgn={game.pgn} />;
+  }, [game?.pgn]);
 
   return (
     <Box sx={{ width: "50%", margin: "auto", mt: 4 }}>
@@ -62,7 +71,7 @@ export default function GamePage() {
           <Typography variant="h6">
             {playerOneName} vs {playerTwoName} - {game.result || "Ongoing"}
           </Typography>
-          <ChessGame pgn={game.pgn} />
+          {chessBoard}
         </>
       ) : (
         <Typography
