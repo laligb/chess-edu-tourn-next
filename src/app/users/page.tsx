@@ -2,13 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchUsers } from "@/services/userService";
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-};
+import { User } from "@/types";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
