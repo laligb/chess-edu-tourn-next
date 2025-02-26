@@ -1,6 +1,6 @@
 "use client";
 
-import ChessGame from "@/components/ChessGame";
+import ChessGame from "@/components/Board";
 import { fetchGames } from "@/services/gameService";
 import { Game } from "@/types";
 import { Box, CircularProgress, Typography } from "@mui/material";
@@ -20,7 +20,7 @@ export default function GamesPage() {
 
   return (
     <>
-      <Box sx={{ width: "80%", margin: "auto", mt: 4 }}>
+      <Box sx={{ margin: "auto", mt: 4 }}>
         <Typography
           variant="h4"
           sx={{ mb: 3, textAlign: "center", fontWeight: "bold" }}
