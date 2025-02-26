@@ -24,8 +24,8 @@ export default function GamePage() {
       .then(async (data: Game) => {
         setGame(data);
 
-        const playerOne = await fetchUserById(data.playerOne);
-        const playerTwo = await fetchUserById(data.playerTwo);
+        const playerOne = await fetchUserById(data.playerOne._id);
+        const playerTwo = await fetchUserById(data.playerTwo._id);
 
         setPlayerOneName(playerOne.name);
         setPlayerTwoName(playerTwo.name);

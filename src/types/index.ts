@@ -1,21 +1,21 @@
 // /src/types/index.ts
 export type Tournament = {
-  id: string;
+  _id: string;
   title: string;
   players: string[];
   games: string[];
 };
 
 export type Game = {
-  id: string;
+  _id: string;
   pgn: string;
-  playerOne: string;
-  playerTwo: string;
+  playerOne: User;
+  playerTwo: User;
   result: string;
 };
 
 export type User = {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   role: string;

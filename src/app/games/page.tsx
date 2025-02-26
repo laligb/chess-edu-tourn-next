@@ -4,6 +4,7 @@ import ChessGame from "@/components/ChessGame";
 import { fetchGames } from "@/services/gameService";
 import { Game } from "@/types";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function GamesPage() {
@@ -48,25 +49,31 @@ export default function GamesPage() {
               alignItems: "center",
             }}
           >
-            {games.map((game) => (
-              <Box
-                key={game.id}
-                sx={{
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  padding: "10px",
-                  boxShadow: 2,
-                  backgroundColor: "#f9f9f9",
-                  textAlign: "center",
-                  maxWidth: "100%",
-                }}
-              >
-                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                  {game.id} {game.playerOne.name} - {game.playerTwo.name}
-                </Typography>
-                <ChessGame pgn={game.pgn} />
-              </Box>
-            ))}
+            {games.map((game) => {
+              console.log("Game object:", game);
+
+              return (
+                <Box
+                  key={game._id}
+                  sx={{
+                    border: "1px solid #ddd",
+                    borderRadius: "8px",
+                    padding: "10px",
+                    boxShadow: 2,
+                    backgroundColor: "#f9f9f9",
+                    textAlign: "center",
+                    maxWidth: "100%",
+                  }}
+                >
+                  <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                    {game.playerOne?.name} - {game.playerTwo?.name}
+                  </Typography>
+                  <Link href={game._id ? `/games/${game._id}` : "#"} passHref>
+                    <ChessGame pgn={game.pgn} />
+                  </Link>
+                </Box>
+              );
+            })}
           </Box>
         ) : (
           <Typography
