@@ -7,6 +7,7 @@ type User = {
   id: string;
   name: string;
   email: string;
+  role: string;
 };
 
 export default function UsersPage() {
@@ -25,7 +26,7 @@ export default function UsersPage() {
         {users.length > 0 ? (
           users.map((user) => (
             <li key={user.id}>
-              {user.name} - {user.email}
+              {user.name} - {user.email} - {user.role}
             </li>
           ))
         ) : (
