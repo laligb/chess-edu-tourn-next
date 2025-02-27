@@ -1,53 +1,66 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchGamesThunk } from "./gameThunk";
-import { RootState } from "../../store";
-import { Game } from "../../../types";
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchGamesThunk, fetchGameThunkById } from "./gameThunk";
+import { Game } from "@/types";
+import { RootState } from "@/redux/store";
 
-interface GamesState {
-  list: Game[];
+interface GameState {
+  games: Game[];
+  game: Game | null;
+  moves: string[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: GamesState = {
-  list: [],
+const initialState: GameState = {
+  games: [],
+  game: null,
+  moves: [],
   loading: false,
   error: null,
 };
 
 const gameSlice = createSlice({
-  name: "games",
+  name: "game",
   initialState,
-  reducers: {
-    clearGames: (state) => {
-      state.list = [];
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchGamesThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        fetchGamesThunk.fulfilled,
-        (state, action: PayloadAction<Game[]>) => {
-          if (JSON.stringify(state.list) !== JSON.stringify(action.payload)) {
-            state.list = action.payload;
-          }
-          state.loading = false;
-        }
-      )
-      .addCase(fetchGamesThunk.rejected, (state, action) => {
-        state.error = action.payload as string;
+      .addCase(fetchGamesThunk.fulfilled, (state, action) => {
+        state.games = action.payload;
         state.loading = false;
+      })
+      .addCase(fetchGamesThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch games";
+      })
+      .addCase(fetchGameThunkById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchGameThunkById.fulfilled, (state, action) => {
+        state.game = action.payload;
+        state.loading = false;
+
+        state.moves = action.payload.pgn
+          .replace(/\[.*?\]/g, "")
+          .replace(/\d+\./g, "")
+          .trim()
+          .split(/\s+/);
+      })
+      .addCase(fetchGameThunkById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch game by ID";
       });
   },
 });
 
-export const { clearGames } = gameSlice.actions;
-export default gameSlice.reducer;
+export const selectGames = (state: RootState) => state.game.games;
+export const selectLoading = (state: RootState) => state.game.loading;
+export const selectGame = (state: RootState) => state.game.game;
+export const selectMoves = (state: RootState) => state.game.moves;
 
-export const selectGames = (state: RootState) => state.games.list;
-export const selectLoading = (state: RootState) => state.games.loading;
-export const selectError = (state: RootState) => state.games.error;
+export default gameSlice.reducer;

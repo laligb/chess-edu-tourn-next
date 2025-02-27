@@ -1,55 +1,34 @@
 "use client";
 
 import ChessGame from "@/components/ChessGame";
-import { useEffect, useMemo, useState, useRef } from "react";
-import { fetchGameById } from "@/services/gameService";
-import { fetchUserById } from "@/services/userService";
+import { useEffect, useMemo } from "react";
+
 import { useParams } from "next/navigation";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { Game } from "@/types";
+
 import MoveList from "@/components/MoveList";
+import { useDispatch } from "react-redux";
+import { GameDispatch } from "@/redux/store";
+import { useSelector } from "react-redux";
+import {
+  selectGame,
+  selectLoading,
+  selectMoves,
+} from "@/redux/slices/games/gameSlice";
+import { fetchGameThunkById } from "@/redux/slices/games/gameThunk";
 
 export default function GamePage() {
   const params = useParams() || {};
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
 
-  const [game, setGame] = useState<Game | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [playerOneName, setPlayerOneName] = useState<string>("");
-  const [playerTwoName, setPlayerTwoName] = useState<string>("");
-  const [moves, setMoves] = useState<string[]>([]);
-
-  const lastPgn = useRef<string | null>(null);
+  const dispatch = useDispatch<GameDispatch>();
+  const game = useSelector(selectGame);
+  const loading = useSelector(selectLoading);
+  const moves = useSelector(selectMoves);
 
   useEffect(() => {
-    if (!id) return;
-
-    fetchGameById(id)
-      .then(async (data: Game) => {
-        if (lastPgn.current !== data.pgn) {
-          setGame(data);
-          lastPgn.current = data.pgn;
-        }
-
-        const playerOne = await fetchUserById(data.playerOne._id);
-        const playerTwo = await fetchUserById(data.playerTwo._id);
-
-        setPlayerOneName(playerOne.name);
-        setPlayerTwoName(playerTwo.name);
-
-        console.log("Fetched game:", data);
-
-        const moveList = data.pgn
-          .replace(/\[.*?\]/g, "")
-          .replace(/\d+\./g, "")
-          .trim()
-          .split(/\s+/);
-
-        setMoves(moveList);
-      })
-      .catch((error) => console.error("Error fetching game:", error))
-      .finally(() => setLoading(false));
-  }, [id]);
+    dispatch(fetchGameThunkById(id));
+  }, [dispatch, id]);
 
   const chessBoard = useMemo(() => {
     if (!game?.pgn) return null;
@@ -79,7 +58,8 @@ export default function GamePage() {
       ) : game ? (
         <>
           <Typography variant="h6">
-            {playerOneName} vs {playerTwoName} - {game.result || "Ongoing"}
+            {game.playerOne.name} vs {game.playerTwo.name} -
+            {game.result || "Ongoing"}
           </Typography>
           {chessBoard}
           <MoveList moves={moves} />

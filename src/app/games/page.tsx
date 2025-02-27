@@ -2,7 +2,7 @@
 
 import ChessGame from "@/components/ChessGame";
 import { selectGames, selectLoading } from "@/redux/slices/games/gameSlice";
-import { AppDispatch } from "@/redux/store";
+import { GameDispatch } from "@/redux/store";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -18,7 +18,7 @@ import {
 import { fetchGamesThunk } from "@/redux/slices/games/gameThunk";
 
 export default function GamesPage() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<GameDispatch>();
   const games = useSelector(selectGames);
   const loading = useSelector(selectLoading);
 

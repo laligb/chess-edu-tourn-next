@@ -3,9 +3,9 @@ import gamesReducer from "./slices/games/gameSlice";
 
 export const store = configureStore({
   reducer: {
-    games: gamesReducer,
+    game: gamesReducer,
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type GameDispatch = typeof store.dispatch;
