@@ -1,16 +1,12 @@
 "use client";
 
 import ChessGame from "@/components/ChessGame";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { GameDispatch } from "@/redux/store";
-import {
-  selectGame,
-  selectLoading,
-  selectMoves,
-} from "@/redux/slices/games/gameSlice";
+import { selectGame, selectLoading } from "@/redux/slices/games/gameSlice";
 import { fetchGameThunkById } from "@/redux/slices/games/gameThunk";
 import ChessBoardWithMoves from "@/components/ChessBoardWIthMoves";
 
@@ -21,7 +17,6 @@ export default function GamePage() {
   const dispatch = useDispatch<GameDispatch>();
   const game = useSelector(selectGame);
   const loading = useSelector(selectLoading);
-  const moves = useSelector(selectMoves);
 
   useEffect(() => {
     dispatch(fetchGameThunkById(id));
@@ -51,8 +46,7 @@ export default function GamePage() {
           player1={game.playerOne.name}
           player2={game.playerTwo.name}
           result={game.result}
-          moves={moves}
-          chessBoard={<ChessGame pgn={game.pgn} />}
+          chessBoard={<ChessGame />}
         />
       ) : (
         <Typography

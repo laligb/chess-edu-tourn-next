@@ -1,11 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import MoveList from "@/components/MoveList";
+import { useSelector } from "react-redux";
+import { selectMoves } from "@/redux/slices/games/gameSlice";
 
 interface ChessBoardWithMovesProps {
   player1: string;
   player2: string;
   result?: string;
-  moves: string[];
+
   chessBoard: React.ReactNode;
 }
 
@@ -13,15 +15,16 @@ function ChessBoardWithMoves({
   player1,
   player2,
   result,
-  moves,
+
   chessBoard,
 }: ChessBoardWithMovesProps) {
+  const moves = useSelector(selectMoves);
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "row",
-
+        borderRadius: "8px",
         alignItems: "flex-start",
         justifyContent: "center",
         width: "100%",
