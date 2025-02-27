@@ -1,5 +1,6 @@
 "use client";
 
+import { Box } from "@mui/material";
 import { Chess } from "chess.js";
 import { useEffect, useState } from "react";
 import { Chessboard } from "react-chessboard";
@@ -20,9 +21,9 @@ function ChessGame({ pgn }: ChessBoardProps) {
   }, [pgn]);
 
   return (
-    <div>
+    <Box>
       <Chessboard position={game.fen()} />
-    </div>
+    </Box>
   );
 }
 

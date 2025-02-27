@@ -21,12 +21,13 @@ function ChessBoardWithMoves({
       sx={{
         display: "flex",
         flexDirection: "row",
-        gap: 3,
+
         alignItems: "flex-start",
         justifyContent: "center",
         width: "100%",
         maxWidth: "900px",
         margin: "auto",
+        border: "20px solid white",
       }}
     >
       <Box
