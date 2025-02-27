@@ -19,14 +19,12 @@ export default function MoveList({ moves }: MoveListProps) {
   return (
     <Box
       sx={{
-        flex: "0.8",
-        minWidth: "250px",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
+        width: "100%",
+        height: "100%",
+
         padding: "10px",
         boxShadow: 2,
         backgroundColor: "#f9f9f9",
-        maxHeight: "500px",
         overflowY: "auto",
       }}
     >

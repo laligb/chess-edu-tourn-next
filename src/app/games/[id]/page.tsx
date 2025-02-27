@@ -2,20 +2,17 @@
 
 import ChessGame from "@/components/ChessGame";
 import { useEffect, useMemo } from "react";
-
 import { useParams } from "next/navigation";
 import { Box, CircularProgress, Typography } from "@mui/material";
-
-import MoveList from "@/components/MoveList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GameDispatch } from "@/redux/store";
-import { useSelector } from "react-redux";
 import {
   selectGame,
   selectLoading,
   selectMoves,
 } from "@/redux/slices/games/gameSlice";
 import { fetchGameThunkById } from "@/redux/slices/games/gameThunk";
+import ChessBoardWithMoves from "@/components/ChessBoardWIthMoves";
 
 export default function GamePage() {
   const params = useParams() || {};
@@ -30,13 +27,8 @@ export default function GamePage() {
     dispatch(fetchGameThunkById(id));
   }, [dispatch, id]);
 
-  const chessBoard = useMemo(() => {
-    if (!game?.pgn) return null;
-    return <ChessGame pgn={game.pgn} />;
-  }, [game?.pgn]);
-
   return (
-    <Box sx={{ width: "50%", margin: "auto", mt: 4 }}>
+    <Box sx={{ width: "80%", margin: "auto", mt: 4 }}>
       <Typography
         variant="h4"
         sx={{ mb: 3, textAlign: "center", fontWeight: "bold" }}
@@ -50,20 +42,18 @@ export default function GamePage() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "300px",
           }}
         >
           <CircularProgress />
         </Box>
       ) : game ? (
-        <>
-          <Typography variant="h6">
-            {game.playerOne.name} vs {game.playerTwo.name} -
-            {game.result || "Ongoing"}
-          </Typography>
-          {chessBoard}
-          <MoveList moves={moves} />
-        </>
+        <ChessBoardWithMoves
+          player1={game.playerOne.name}
+          player2={game.playerTwo.name}
+          result={game.result}
+          moves={moves}
+          chessBoard={<ChessGame pgn={game.pgn} />}
+        />
       ) : (
         <Typography
           variant="h6"
