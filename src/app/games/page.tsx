@@ -1,16 +1,21 @@
 "use client";
 
 import ChessGame from "@/components/ChessGame";
-import {
-  fetchGamesThunk,
-  selectGames,
-  selectLoading,
-} from "@/redux/slices/gameSlice";
+import { selectGames, selectLoading } from "@/redux/slices/games/gameSlice";
 import { AppDispatch } from "@/redux/store";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  gamesPageContainer,
+  gamesTitle,
+  loadingContainer,
+  gamesGrid,
+  gameCard,
+  noGamesText,
+} from "@/styles/gamesStyles";
+import { fetchGamesThunk } from "@/redux/slices/games/gameThunk";
 
 export default function GamesPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,50 +23,23 @@ export default function GamesPage() {
   const loading = useSelector(selectLoading);
 
   useEffect(() => {
-    if (games.length === 0) {
-      // ✅ Prevent infinite fetch calls
-      dispatch(fetchGamesThunk());
-    }
-  }, [dispatch, games.length]); // ✅ Only runs when `games.length` changes
+    dispatch(fetchGamesThunk());
+  }, [dispatch]);
 
   return (
-    <Box sx={{ width: "80%", margin: "auto", mt: 4 }}>
-      <Typography
-        variant="h4"
-        sx={{ mb: 3, textAlign: "center", fontWeight: "bold" }}
-      >
+    <Box sx={gamesPageContainer}>
+      <Typography variant="h4" sx={gamesTitle}>
         Games
       </Typography>
 
       {loading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "300px",
-          }}
-        >
+        <Box sx={loadingContainer}>
           <CircularProgress />
         </Box>
       ) : games.length > 0 ? (
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gap: 1,
-          }}
-        >
+        <Box sx={gamesGrid}>
           {games.map((game) => (
-            <Box
-              key={game._id}
-              sx={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "10px",
-                boxShadow: 2,
-              }}
-            >
+            <Box key={game._id} sx={gameCard}>
               <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                 {game.playerOne?.name} - {game.playerTwo?.name}
               </Typography>
@@ -72,10 +50,7 @@ export default function GamesPage() {
           ))}
         </Box>
       ) : (
-        <Typography
-          variant="h6"
-          sx={{ textAlign: "center", mt: 2, color: "gray" }}
-        >
+        <Typography variant="h6" sx={noGamesText}>
           No games found.
         </Typography>
       )}

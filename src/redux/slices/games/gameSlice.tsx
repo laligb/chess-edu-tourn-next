@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { fetchGames } from "../../services/gameService"; // ✅ Import service function
-import { RootState } from "../store";
-import { Game } from "../../types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchGamesThunk } from "./gameThunk";
+import { RootState } from "../../store";
+import { Game } from "../../../types";
 
 interface GamesState {
   list: Game[];
@@ -9,30 +9,12 @@ interface GamesState {
   error: string | null;
 }
 
-// ✅ Initial state
 const initialState: GamesState = {
   list: [],
   loading: false,
   error: null,
 };
 
-// ✅ Use service function inside Redux Thunk
-export const fetchGamesThunk = createAsyncThunk<
-  Game[],
-  void,
-  { rejectValue: string }
->("games/fetchGames", async (_, { rejectWithValue }) => {
-  try {
-    return await fetchGames();
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      return rejectWithValue(error.message);
-    }
-    return rejectWithValue("An unknown error occurred");
-  }
-});
-
-// ✅ Redux Slice
 const gameSlice = createSlice({
   name: "games",
   initialState,
@@ -51,7 +33,6 @@ const gameSlice = createSlice({
         fetchGamesThunk.fulfilled,
         (state, action: PayloadAction<Game[]>) => {
           if (JSON.stringify(state.list) !== JSON.stringify(action.payload)) {
-            // ✅ Prevent unnecessary updates
             state.list = action.payload;
           }
           state.loading = false;
@@ -64,11 +45,9 @@ const gameSlice = createSlice({
   },
 });
 
-// ✅ Export actions and reducer
 export const { clearGames } = gameSlice.actions;
 export default gameSlice.reducer;
 
-// ✅ Selectors
 export const selectGames = (state: RootState) => state.games.list;
 export const selectLoading = (state: RootState) => state.games.loading;
 export const selectError = (state: RootState) => state.games.error;
