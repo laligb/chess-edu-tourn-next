@@ -49,7 +49,7 @@ export default function GamesPage() {
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gap: 2,
+            gap: 1,
           }}
         >
           {games.map((game) => (
