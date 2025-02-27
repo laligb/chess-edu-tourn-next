@@ -7,6 +7,7 @@ import { fetchUserById } from "@/services/userService";
 import { useParams } from "next/navigation";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { Game } from "@/types";
+import MoveList from "@/components/MoveList";
 
 export default function GamePage() {
   const params = useParams() || {};
@@ -16,6 +17,7 @@ export default function GamePage() {
   const [loading, setLoading] = useState(true);
   const [playerOneName, setPlayerOneName] = useState<string>("");
   const [playerTwoName, setPlayerTwoName] = useState<string>("");
+  const [moves, setMoves] = useState<string[]>([]);
 
   const lastPgn = useRef<string | null>(null);
 
@@ -36,6 +38,14 @@ export default function GamePage() {
         setPlayerTwoName(playerTwo.name);
 
         console.log("Fetched game:", data);
+
+        const moveList = data.pgn
+          .replace(/\[.*?\]/g, "")
+          .replace(/\d+\./g, "")
+          .trim()
+          .split(/\s+/);
+
+        setMoves(moveList);
       })
       .catch((error) => console.error("Error fetching game:", error))
       .finally(() => setLoading(false));
@@ -72,6 +82,7 @@ export default function GamePage() {
             {playerOneName} vs {playerTwoName} - {game.result || "Ongoing"}
           </Typography>
           {chessBoard}
+          <MoveList moves={moves} />
         </>
       ) : (
         <Typography

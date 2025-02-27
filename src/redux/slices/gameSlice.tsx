@@ -23,7 +23,7 @@ export const fetchGamesThunk = createAsyncThunk<
   { rejectValue: string }
 >("games/fetchGames", async (_, { rejectWithValue }) => {
   try {
-    return await fetchGames(); // ✅ Calls service function instead of direct fetch
+    return await fetchGames();
   } catch (error: unknown) {
     if (error instanceof Error) {
       return rejectWithValue(error.message);
@@ -50,7 +50,10 @@ const gameSlice = createSlice({
       .addCase(
         fetchGamesThunk.fulfilled,
         (state, action: PayloadAction<Game[]>) => {
-          state.list = action.payload;
+          if (JSON.stringify(state.list) !== JSON.stringify(action.payload)) {
+            // ✅ Prevent unnecessary updates
+            state.list = action.payload;
+          }
           state.loading = false;
         }
       )
