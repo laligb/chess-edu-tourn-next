@@ -20,7 +20,7 @@ function ChessGame({ pgn }: ChessBoardProps) {
   }, [pgn]);
 
   return (
-    <div>
+    <div style={{ maxWidth: "500px" }}>
       <Chessboard position={game.fen()} />
     </div>
   );
