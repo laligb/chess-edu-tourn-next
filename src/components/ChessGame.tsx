@@ -10,45 +10,58 @@ import {
   getLegalMoves,
 } from "@/redux/slices/games/gameSlice";
 import { Square } from "chess.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const ChessGame = () => {
   const dispatch = useDispatch();
   const fen = useSelector(selectFen);
   const legalMoves = useSelector(selectLegalMoves);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-  const [availableMoves, setAvailableMoves] = useState<string[]>([]);
+  const [, setAvailableMoves] = useState<string[]>([]);
+  const targetSquareRef = useRef<string | null>(null);
 
-  // ✅ Fetch legal moves when clicking a piece
-  const onPieceClick = (square: string) => {
-    setSelectedSquare(square);
-    dispatch(getLegalMoves({ square: square as Square }));
-  };
-
-  // ✅ Wait for Redux to update before allowing a move
   useEffect(() => {
-    if (selectedSquare) {
+    if (selectedSquare && legalMoves[selectedSquare]) {
       console.log(
-        "Legal moves for",
+        "Legal moves updated for",
         selectedSquare,
         ":",
-        legalMoves[selectedSquare] || []
+        legalMoves[selectedSquare]
       );
-      setAvailableMoves(legalMoves[selectedSquare] || []);
-    }
-  }, [legalMoves, selectedSquare]);
+      setAvailableMoves([...legalMoves[selectedSquare]]);
 
-  // ✅ Validate legal move before making it
+      if (
+        targetSquareRef.current &&
+        legalMoves[selectedSquare].includes(targetSquareRef.current)
+      ) {
+        console.log(
+          `Retrying move: ${selectedSquare} → ${targetSquareRef.current}`
+        );
+        dispatch(
+          updateMove({ from: selectedSquare, to: targetSquareRef.current })
+        );
+        targetSquareRef.current = null;
+      }
+    }
+  }, [legalMoves, selectedSquare, dispatch]);
+
   const onDrop = (sourceSquare: string, targetSquare: string): boolean => {
     console.log("Attempting move:", sourceSquare, "to", targetSquare);
-    console.log("Available moves for", sourceSquare, ":", availableMoves);
 
-    if (!availableMoves.includes(targetSquare)) {
-      console.warn("Illegal move attempted:", sourceSquare, "to", targetSquare);
-      return false; // ❌ Prevent illegal moves
+    if (!legalMoves[sourceSquare]) {
+      console.log(`Fetching moves for ${sourceSquare}...`);
+      setSelectedSquare(sourceSquare);
+      targetSquareRef.current = targetSquare;
+      dispatch(getLegalMoves({ square: sourceSquare as Square }));
+      return false;
     }
 
-    dispatch(updateMove({ from: sourceSquare, to: targetSquare })); // ✅ Update Redux state
+    if (!legalMoves[sourceSquare].includes(targetSquare)) {
+      console.warn("Illegal move attempted:", sourceSquare, "to", targetSquare);
+      return false;
+    }
+
+    dispatch(updateMove({ from: sourceSquare, to: targetSquare }));
     return true;
   };
 
@@ -57,7 +70,10 @@ const ChessGame = () => {
       <Chessboard
         position={fen}
         onPieceDrop={onDrop}
-        onSquareClick={onPieceClick} // ✅ Fetch legal moves on click
+        onSquareClick={(square) => {
+          setSelectedSquare(square);
+          dispatch(getLegalMoves({ square: square as Square }));
+        }}
       />
     </Box>
   );
