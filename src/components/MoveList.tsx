@@ -30,7 +30,7 @@ export default function MoveList({ moves }: MoveListProps) {
     >
       <Typography
         variant="h6"
-        sx={{ fontWeight: "bold", textAlign: "center", mb: 2 }}
+        sx={{ fontWeight: "bold", textAlign: "center", mb: 2, color: "black" }}
       >
         Move List
       </Typography>
@@ -44,7 +44,7 @@ export default function MoveList({ moves }: MoveListProps) {
         {moves.map((move, index) => (
           <Typography
             key={index}
-            sx={{ fontSize: "16px", textAlign: "center" }}
+            sx={{ fontSize: "16px", textAlign: "center", color: "black" }}
           >
             {index % 2 === 0 ? `${Math.floor(index / 2) + 1}. ${move}` : move}
           </Typography>
