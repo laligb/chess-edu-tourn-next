@@ -1,6 +1,5 @@
 "use client";
 
-import ChessGame from "@/components/ChessGame";
 import { selectGames, selectLoading } from "@/redux/slices/games/gameSlice";
 import { GameDispatch } from "@/redux/store";
 import { Box, CircularProgress, Typography } from "@mui/material";
@@ -16,6 +15,7 @@ import {
   noGamesText,
 } from "@/styles/gamesStyles";
 import { fetchGamesThunk } from "@/redux/slices/games/gameThunk";
+import ChessView from "@/components/ChessView";
 
 export default function GamesPage() {
   const dispatch = useDispatch<GameDispatch>();
@@ -44,7 +44,7 @@ export default function GamesPage() {
                 {game.playerOne?.name} - {game.playerTwo?.name}
               </Typography>
               <Link href={game._id ? `/games/${game._id}` : "#"} passHref>
-                <ChessGame pgn={game.pgn} />
+                <ChessView pgn={game.pgn} />
               </Link>
             </Box>
           ))}

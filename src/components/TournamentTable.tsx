@@ -37,7 +37,7 @@ export default function TournamentTable({ tournaments }: TournamentTableProps) {
         <TableBody>
           {tournaments.map((tournament) => (
             <TableRow
-              key={tournament.id}
+              key={tournament._id}
               sx={{ "&:nth-of-type(odd)": { backgroundColor: "#f5f5f5" } }}
             >
               <TableCell component="th" scope="row">
