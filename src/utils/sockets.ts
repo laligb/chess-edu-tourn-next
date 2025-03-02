@@ -1,30 +1,29 @@
 "use client";
 
-import { io, Socket } from "socket.io-client";
+import io from "socket.io-client";
 
 console.log("🔄 Attempting to connect to WebSocket...");
 
 const isBrowser = typeof window !== "undefined";
-const socket: typeof Socket | null = isBrowser
+const socket: ReturnType<typeof io> | null = isBrowser
   ? io("http://localhost:3000", {
       transports: ["websocket"],
       reconnection: true,
-      withCredentials: true,
     })
   : null;
 
 if (isBrowser && socket) {
-  // (window as any).socket = socket;
+  (window as unknown as { socket?: ReturnType<typeof io> }).socket = socket;
 
-  socket?.on("connect", () => {
+  socket.on("connect", () => {
     console.log("✅ Connected to WebSocket server:", socket.id);
   });
 
-  socket?.on("connect_error", (error: unknown) => {
+  socket.on("connect_error", (error: unknown) => {
     console.error("❌ WebSocket Connection Error:", error);
   });
 
-  socket?.on("disconnect", () => {
+  socket.on("disconnect", () => {
     console.log("❌ Disconnected from WebSocket server");
   });
 }
