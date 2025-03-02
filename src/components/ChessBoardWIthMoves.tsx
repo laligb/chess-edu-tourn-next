@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import MoveList from "@/components/MoveList";
 import { useSelector } from "react-redux";
 import { selectMoves } from "@/redux/slices/games/gameSlice";
+import ChessGame from "@/components/ChessGame";
 
 interface ChessBoardWithMovesProps {
   player1: string;
@@ -15,8 +16,6 @@ function ChessBoardWithMoves({
   player1,
   player2,
   result,
-
-  chessBoard,
 }: ChessBoardWithMovesProps) {
   const moves = useSelector(selectMoves);
   return (
@@ -46,7 +45,7 @@ function ChessBoardWithMoves({
         }}
       >
         <Box sx={{ width: "100%" }}>
-          {chessBoard || "Chessboard Not Available"}
+          <ChessGame />
         </Box>
       </Box>
 
