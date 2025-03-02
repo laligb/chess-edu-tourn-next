@@ -1,6 +1,6 @@
 "use client";
 
-import { Socket } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 console.log("🔄 Attempting to connect to WebSocket...");
 
