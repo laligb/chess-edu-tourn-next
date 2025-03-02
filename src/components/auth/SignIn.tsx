@@ -1,55 +1,17 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Divider from "@mui/material/Divider";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import Link from "@mui/material/Link";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
-import { styled } from "@mui/material/styles";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
-
-const theme = createTheme();
-
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignSelf: "center",
-  width: "100%",
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: "auto",
-  [theme.breakpoints.up("sm")]: {
-    maxWidth: "450px",
-  },
-  boxShadow:
-    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-}));
-
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  height: "100vh",
-  minHeight: "100%",
-  padding: theme.spacing(2),
-  [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(4),
-  },
-}));
+import { MUI } from "@/utils/multiImports";
+import { Card, SignInContainer, theme } from "@/styles/loginStyles";
 
 export default function SignIn() {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
+  const [emailError] = React.useState(false);
+  const [emailErrorMessage] = React.useState("");
+  const [passwordError] = React.useState(false);
+  const [passwordErrorMessage] = React.useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: {
+    preventDefault: () => void;
+    currentTarget: HTMLFormElement | undefined;
+  }) => {
     if (emailError || passwordError) {
       event.preventDefault();
       return;
@@ -62,14 +24,18 @@ export default function SignIn() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline enableColorScheme />
+    <MUI.ThemeProvider theme={theme}>
+      <MUI.CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <Typography component="h1" variant="h4" sx={{ textAlign: "center" }}>
+          <MUI.Typography
+            component="h1"
+            variant="h4"
+            sx={{ textAlign: "center" }}
+          >
             Sign in
-          </Typography>
-          <Box
+          </MUI.Typography>
+          <MUI.Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
@@ -80,9 +46,9 @@ export default function SignIn() {
               gap: 2,
             }}
           >
-            <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
+            <MUI.FormControl>
+              <MUI.FormLabel htmlFor="email">Email</MUI.FormLabel>
+              <MUI.TextField
                 error={emailError}
                 helperText={emailErrorMessage}
                 id="email"
@@ -95,10 +61,10 @@ export default function SignIn() {
                 variant="outlined"
                 color={emailError ? "error" : "primary"}
               />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <TextField
+            </MUI.FormControl>
+            <MUI.FormControl>
+              <MUI.FormLabel htmlFor="password">Password</MUI.FormLabel>
+              <MUI.TextField
                 error={passwordError}
                 helperText={passwordErrorMessage}
                 name="password"
@@ -110,32 +76,40 @@ export default function SignIn() {
                 variant="outlined"
                 color={passwordError ? "error" : "primary"}
               />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+            </MUI.FormControl>
+            <MUI.FormControlLabel
+              control={<MUI.Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button type="submit" fullWidth variant="contained">
+            <MUI.Button type="submit" fullWidth variant="contained">
               Sign in
-            </Button>
-          </Box>
-          <Divider>or</Divider>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Button fullWidth variant="outlined" startIcon={<GoogleIcon />}>
+            </MUI.Button>
+          </MUI.Box>
+          <MUI.Divider>or</MUI.Divider>
+          <MUI.Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <MUI.Button
+              fullWidth
+              variant="outlined"
+              startIcon={<MUI.GoogleIcon />}
+            >
               Sign in with Google
-            </Button>
-            <Button fullWidth variant="outlined" startIcon={<FacebookIcon />}>
+            </MUI.Button>
+            <MUI.Button
+              fullWidth
+              variant="outlined"
+              startIcon={<MUI.FacebookIcon />}
+            >
               Sign in with Facebook
-            </Button>
-            <Typography sx={{ textAlign: "center" }}>
+            </MUI.Button>
+            <MUI.Typography sx={{ textAlign: "center" }}>
               Don&apos;t have an account?{" "}
-              <Link href="#" variant="body2">
+              <MUI.Link href="/signup" variant="body2">
                 Sign up
-              </Link>
-            </Typography>
-          </Box>
+              </MUI.Link>
+            </MUI.Typography>
+          </MUI.Box>
         </Card>
       </SignInContainer>
-    </ThemeProvider>
+    </MUI.ThemeProvider>
   );
 }

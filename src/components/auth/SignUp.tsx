@@ -1,200 +1,115 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import Link from "@mui/material/Link";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
-import { styled } from "@mui/material/styles";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
-
-const theme = createTheme();
-
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignSelf: "center",
-  width: "100%",
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: "auto",
-  boxShadow:
-    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  [theme.breakpoints.up("sm")]: {
-    width: "450px",
-  },
-}));
-
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-  height: "100vh",
-  minHeight: "100%",
-  padding: theme.spacing(2),
-  [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(4),
-  },
-}));
+import { MUI } from "@/utils/multiImports";
+import { Card, SignUpContainer, theme } from "@/styles/signupStyles";
+import { useState } from "react";
 
 export default function SignUp() {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState("");
+  const [emailError] = useState(false);
+  const [emailErrorMessage] = useState("");
+  const [passwordError] = useState(false);
+  const [passwordErrorMessage] = useState("");
 
-  const validateInputs = () => {
-    const email = document.getElementById("email") as HTMLInputElement;
-    const password = document.getElementById("password") as HTMLInputElement;
-    const name = document.getElementById("name") as HTMLInputElement;
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage("Name is required.");
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage("");
-    }
-
-    return isValid;
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (nameError || emailError || passwordError) {
+  const handleSubmit = (event: {
+    preventDefault: () => void;
+    currentTarget: HTMLFormElement | undefined;
+  }) => {
+    if (emailError || passwordError) {
       event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
     console.log({
-      name: data.get("name"),
       email: data.get("email"),
       password: data.get("password"),
     });
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline enableColorScheme />
+    <MUI.ThemeProvider theme={theme}>
+      <MUI.CssBaseline enableColorScheme />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <Typography
+          <MUI.Typography
             component="h1"
             variant="h4"
-            sx={{ width: "100%", textAlign: "center" }}
+            sx={{ textAlign: "center" }}
           >
             Sign up
-          </Typography>
-          <Box
+          </MUI.Typography>
+          <MUI.Box
             component="form"
             onSubmit={handleSubmit}
-            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+            noValidate
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              gap: 2,
+            }}
           >
-            <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
-              <TextField
-                autoComplete="name"
-                name="name"
-                required
-                fullWidth
-                id="name"
-                placeholder="Jon Snow"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? "error" : "primary"}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                placeholder="your@email.com"
-                name="email"
-                autoComplete="email"
-                variant="outlined"
+            <MUI.FormControl>
+              <MUI.FormLabel htmlFor="email">Email</MUI.FormLabel>
+              <MUI.TextField
                 error={emailError}
                 helperText={emailErrorMessage}
-                color={passwordError ? "error" : "primary"}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <TextField
+                id="email"
+                type="email"
+                name="email"
+                autoComplete="email"
+                autoFocus
                 required
                 fullWidth
-                name="password"
-                placeholder="••••••"
-                type="password"
-                id="password"
-                autoComplete="new-password"
                 variant="outlined"
+                color={emailError ? "error" : "primary"}
+              />
+            </MUI.FormControl>
+            <MUI.FormControl>
+              <MUI.FormLabel htmlFor="password">Password</MUI.FormLabel>
+              <MUI.TextField
                 error={passwordError}
                 helperText={passwordErrorMessage}
+                name="password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                required
+                fullWidth
+                variant="outlined"
                 color={passwordError ? "error" : "primary"}
               />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="allowExtraEmails" color="primary" />}
-              label="I want to receive updates via email."
+            </MUI.FormControl>
+            <MUI.FormControlLabel
+              control={<MUI.Checkbox value="remember" color="primary" />}
+              label="I agree to the terms and conditions"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              onClick={validateInputs}
-            >
+            <MUI.Button type="submit" fullWidth variant="contained">
               Sign up
-            </Button>
-          </Box>
-          <Divider>
-            <Typography sx={{ color: "text.secondary" }}>or</Typography>
-          </Divider>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Button fullWidth variant="outlined" startIcon={<GoogleIcon />}>
+            </MUI.Button>
+          </MUI.Box>
+          <MUI.Divider>or</MUI.Divider>
+          <MUI.Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <MUI.Button
+              fullWidth
+              variant="outlined"
+              startIcon={<MUI.GoogleIcon />}
+            >
               Sign up with Google
-            </Button>
-            <Button fullWidth variant="outlined" startIcon={<FacebookIcon />}>
+            </MUI.Button>
+            <MUI.Button
+              fullWidth
+              variant="outlined"
+              startIcon={<MUI.FacebookIcon />}
+            >
               Sign up with Facebook
-            </Button>
-            <Typography sx={{ textAlign: "center" }}>
+            </MUI.Button>
+            <MUI.Typography sx={{ textAlign: "center" }}>
               Already have an account?{" "}
-              <Link href="/login" variant="body2">
+              <MUI.Link href="/login" variant="body2">
                 Sign in
-              </Link>
-            </Typography>
-          </Box>
+              </MUI.Link>
+            </MUI.Typography>
+          </MUI.Box>
         </Card>
       </SignUpContainer>
-    </ThemeProvider>
+    </MUI.ThemeProvider>
   );
 }
