@@ -1,6 +1,6 @@
-"use client"; // ✅ Ensures this runs only in the browser
+"use client";
 
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
 
 console.log("🔄 Attempting to connect to WebSocket...");
 
@@ -14,13 +14,13 @@ const socket: typeof Socket | null = isBrowser
   : null;
 
 if (isBrowser && socket) {
-  (window as any).socket = socket;
+  // (window as any).socket = socket;
 
   socket?.on("connect", () => {
     console.log("✅ Connected to WebSocket server:", socket.id);
   });
 
-  socket?.on("connect_error", (error) => {
+  socket?.on("connect_error", (error: unknown) => {
     console.error("❌ WebSocket Connection Error:", error);
   });
 
