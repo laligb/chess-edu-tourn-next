@@ -1,28 +1,33 @@
+"use client";
+
 import { MUI } from "@/utils/multiImports";
 import { Card, SignUpContainer, theme } from "@/styles/signupStyles";
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import { auth } from "@/services/firebaseConfig";
 import { apiClient } from "@/services/apiClient";
+import { updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
+import { AppDispatch } from "@/redux/store";
+import { loginUser } from "@/redux/slices/users/userSlice";
 
 export default function SignUp() {
-  const [emailError] = useState(false);
-  const [emailErrorMessage] = useState("");
-  const [passwordError] = useState(false);
-  const [passwordErrorMessage] = useState("");
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = async (event: {
-    preventDefault: () => void;
-    currentTarget: HTMLFormElement | undefined;
-  }) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setError(null);
+
+    if (!name || !email || !password) {
+      setError("All fields are required.");
       return;
     }
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get("email") as string;
-    const password = data.get("password") as string;
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -30,24 +35,33 @@ export default function SignUp() {
         email,
         password
       );
-      console.log("🎉 Firebase Signup Successful:", userCredential.user);
+      const user = userCredential.user;
 
-      const token = await userCredential.user.getIdToken();
+      // ✅ Update Firebase profile with display name
+      await updateProfile(user, { displayName: name });
 
-      await apiClient.post(
+      const token = await user.getIdToken();
+
+      // ✅ Send user data to backend
+      const response = await apiClient.post(
         "/users/signup",
         {
-          _id: userCredential.user.uid,
-          email: userCredential.user.email,
-          name: userCredential.user.displayName || "User",
+          _id: user.uid,
+          email: user.email,
+          name: name,
           role: "user",
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log("✅ User stored in MongoDB");
+      console.log("✅ User stored in MongoDB:", response.data);
+
+      dispatch(loginUser({ email, password }));
+
+      router.push("/profile");
     } catch (error: any) {
       console.error("❌ Signup Failed:", error);
+      setError(error.message || "Signup failed. Please try again.");
     }
   };
 
@@ -75,44 +89,57 @@ export default function SignUp() {
             }}
           >
             <MUI.FormControl>
-              <MUI.FormLabel htmlFor="email">Email</MUI.FormLabel>
+              <MUI.FormLabel htmlFor="name">Name</MUI.FormLabel>
               <MUI.TextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                id="email"
-                type="email"
-                name="email"
-                autoComplete="email"
+                id="name"
+                name="name"
+                autoComplete="name"
                 autoFocus
                 required
                 fullWidth
                 variant="outlined"
-                color={emailError ? "error" : "primary"}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </MUI.FormControl>
+            <MUI.FormControl>
+              <MUI.FormLabel htmlFor="email">Email</MUI.FormLabel>
+              <MUI.TextField
+                id="email"
+                name="email"
+                autoComplete="email"
+                required
+                fullWidth
+                variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </MUI.FormControl>
             <MUI.FormControl>
               <MUI.FormLabel htmlFor="password">Password</MUI.FormLabel>
               <MUI.TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
                 name="password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
                 fullWidth
                 variant="outlined"
-                color={passwordError ? "error" : "primary"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </MUI.FormControl>
-            <MUI.FormControlLabel
-              control={<MUI.Checkbox value="remember" color="primary" />}
-              label="I agree to the terms and conditions"
-            />
             <MUI.Button type="submit" fullWidth variant="contained">
               Sign up
             </MUI.Button>
           </MUI.Box>
+          {error && (
+            <MUI.Typography
+              sx={{ color: "error.main", textAlign: "center", mt: 2 }}
+            >
+              {error}
+            </MUI.Typography>
+          )}
           <MUI.Divider>or</MUI.Divider>
           <MUI.Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <MUI.Button

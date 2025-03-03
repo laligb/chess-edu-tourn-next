@@ -5,6 +5,7 @@ import {
 } from "@/services/userService";
 import { User } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 interface UserState {
   users: User[];
@@ -13,9 +14,17 @@ interface UserState {
   error: string | null;
 }
 
+const getStoredUser = () => {
+  if (typeof window !== "undefined") {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  }
+  return null;
+};
+
 const initialState: UserState = {
   users: [],
-  user: null,
+  user: getStoredUser(),
   loading: false,
   error: null,
 };
@@ -33,7 +42,9 @@ export const loginUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      return await firebaseLogin(email, password);
+      const response = await firebaseLogin(email, password);
+      console.log("Login API Response:", response);
+      return response;
     } catch (error) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -43,10 +54,40 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const checkUserSession = createAsyncThunk<User | null>(
+  "user/checkSession",
+  async () => {
+    return new Promise((resolve) => {
+      const auth = getAuth();
+      console.log("🔍 Checking Firebase session...");
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log("✅ Firebase session found:", user);
+          resolve({
+            _id: user.uid,
+            name: user.displayName || "No Name",
+            email: user.email || "",
+            role: "user",
+          });
+        } else {
+          console.log("❌ No Firebase session found");
+          resolve(null);
+        }
+        unsubscribe();
+      });
+    });
+  }
+);
+
 const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    logoutUser: (state) => {
+      state.user = null;
+      localStorage.removeItem("user");
+    },
+  },
 
   extraReducers(builder) {
     builder
@@ -65,9 +106,21 @@ const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        if (action.payload?.user) {
+          const userData = {
+            _id: action.payload.user._id,
+            name: action.payload.user.name,
+            email: action.payload.user.email,
+            role: action.payload.user.role,
+          };
+          state.user = userData;
+          localStorage.setItem("user", JSON.stringify(userData));
+        } else {
+          state.error = "Invalid user data received";
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -77,4 +130,5 @@ const userSlice = createSlice({
 });
 
 export type { UserState };
+export const { logoutUser } = userSlice.actions;
 export default userSlice.reducer;

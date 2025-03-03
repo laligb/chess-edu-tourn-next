@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -5,13 +7,23 @@ import type { AppDispatch, RootState } from "@/redux/store";
 import { loginUser } from "@/redux/slices/users/userSlice";
 import { MUI } from "@/utils/multiImports";
 import { Card, SignInContainer, theme } from "@/styles/loginStyles";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error } = useSelector((state: RootState) => state.user);
+  const router = useRouter();
+  const { loading, error, user } = useSelector(
+    (state: RootState) => state.user
+  );
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  React.useEffect(() => {
+    if (user) {
+      router.push("/profile");
+    }
+  }, [user, router]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
