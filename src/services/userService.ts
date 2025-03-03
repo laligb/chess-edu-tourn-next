@@ -66,3 +66,51 @@ export const firebaseLogin = async (
 export const firebaseLogout = async (): Promise<void> => {
   await signOut(auth);
 };
+
+export const firebaseSignup = async (
+  email: string,
+  password: string,
+  name: string
+): Promise<User> => {
+  console.log("🔄 Attempting Firebase signup for:", email);
+
+  if (!auth) {
+    console.error("❌ Firebase Auth is NOT initialized!");
+    throw new Error("Firebase Auth not initialized");
+  }
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    console.log("✅ Firebase Signup Success:", userCredential.user);
+
+    const firebaseUser = userCredential.user;
+    if (!firebaseUser.email) {
+      throw new Error("❌ Firebase user has no email");
+    }
+
+    const token = await firebaseUser.getIdToken();
+    console.log("🔑 Firebase Token:", token);
+
+    // Send user data to backend signup endpoint
+    const response = await apiClient.post(
+      "/users/signup",
+      {
+        _id: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: name || "No Name",
+        role: "user",
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    console.log("✅ Backend Signup Success:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("🔥 Firebase Signup Error:", error);
+    throw error;
+  }
+};

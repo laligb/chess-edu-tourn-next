@@ -1,6 +1,9 @@
 import { MUI } from "@/utils/multiImports";
 import { Card, SignUpContainer, theme } from "@/styles/signupStyles";
 import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/services/firebaseConfig";
+import { apiClient } from "@/services/apiClient";
 
 export default function SignUp() {
   const [emailError] = useState(false);
@@ -8,7 +11,7 @@ export default function SignUp() {
   const [passwordError] = useState(false);
   const [passwordErrorMessage] = useState("");
 
-  const handleSubmit = (event: {
+  const handleSubmit = async (event: {
     preventDefault: () => void;
     currentTarget: HTMLFormElement | undefined;
   }) => {
@@ -16,11 +19,37 @@ export default function SignUp() {
       event.preventDefault();
       return;
     }
+    event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email") as string;
+    const password = data.get("password") as string;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("🎉 Firebase Signup Successful:", userCredential.user);
+
+      const token = await userCredential.user.getIdToken();
+      console.log("🔑 Firebase Token:", token);
+
+      await apiClient.post(
+        "/users/signup",
+        {
+          _id: userCredential.user.uid,
+          email: userCredential.user.email,
+          name: userCredential.user.displayName || "User",
+          role: "user",
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log("✅ User stored in MongoDB");
+    } catch (error: any) {
+      console.error("❌ Signup Failed:", error);
+    }
   };
 
   return (
