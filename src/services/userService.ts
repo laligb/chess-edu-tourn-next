@@ -42,7 +42,6 @@ export const firebaseLogin = async (
     }
 
     const token = await firebaseUser.getIdToken();
-    console.log("🔑 Firebase Token:", token);
 
     const response = await apiClient.post(
       "/users/login",
@@ -93,9 +92,7 @@ export const firebaseSignup = async (
     }
 
     const token = await firebaseUser.getIdToken();
-    console.log("🔑 Firebase Token:", token);
 
-    // Send user data to backend signup endpoint
     const response = await apiClient.post(
       "/users/signup",
       {

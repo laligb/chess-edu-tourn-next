@@ -33,7 +33,6 @@ export default function SignUp() {
       console.log("🎉 Firebase Signup Successful:", userCredential.user);
 
       const token = await userCredential.user.getIdToken();
-      console.log("🔑 Firebase Token:", token);
 
       await apiClient.post(
         "/users/signup",
