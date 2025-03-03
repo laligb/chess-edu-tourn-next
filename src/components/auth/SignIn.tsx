@@ -1,26 +1,21 @@
 import * as React from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/redux/store";
+import { loginUser } from "@/redux/slices/users/userSlice";
 import { MUI } from "@/utils/multiImports";
 import { Card, SignInContainer, theme } from "@/styles/loginStyles";
 
 export default function SignIn() {
-  const [emailError] = React.useState(false);
-  const [emailErrorMessage] = React.useState("");
-  const [passwordError] = React.useState(false);
-  const [passwordErrorMessage] = React.useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, error } = useSelector((state: RootState) => state.user);
 
-  const handleSubmit = (event: {
-    preventDefault: () => void;
-    currentTarget: HTMLFormElement | undefined;
-  }) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    dispatch(loginUser({ email, password }));
   };
 
   return (
@@ -49,8 +44,6 @@ export default function SignIn() {
             <MUI.FormControl>
               <MUI.FormLabel htmlFor="email">Email</MUI.FormLabel>
               <MUI.TextField
-                error={emailError}
-                helperText={emailErrorMessage}
                 id="email"
                 type="email"
                 name="email"
@@ -59,14 +52,13 @@ export default function SignIn() {
                 required
                 fullWidth
                 variant="outlined"
-                color={emailError ? "error" : "primary"}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </MUI.FormControl>
             <MUI.FormControl>
               <MUI.FormLabel htmlFor="password">Password</MUI.FormLabel>
               <MUI.TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
                 name="password"
                 type="password"
                 id="password"
@@ -74,17 +66,28 @@ export default function SignIn() {
                 required
                 fullWidth
                 variant="outlined"
-                color={passwordError ? "error" : "primary"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </MUI.FormControl>
             <MUI.FormControlLabel
               control={<MUI.Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <MUI.Button type="submit" fullWidth variant="contained">
-              Sign in
+            <MUI.Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={loading}
+            >
+              {loading ? "Signing in..." : "Sign In"}
             </MUI.Button>
           </MUI.Box>
+          {error && (
+            <MUI.Typography sx={{ color: "error.main", textAlign: "center" }}>
+              {error}
+            </MUI.Typography>
+          )}
           <MUI.Divider>or</MUI.Divider>
           <MUI.Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <MUI.Button

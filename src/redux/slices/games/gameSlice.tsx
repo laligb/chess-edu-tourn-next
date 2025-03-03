@@ -60,7 +60,6 @@ const gameSlice = createSlice({
         );
       }
 
-      // ✅ Ensure legal moves are correctly stored in Redux
       state.legalMoves[action.payload.square] =
         legalMoves.map((move) => move.to) || [];
     },

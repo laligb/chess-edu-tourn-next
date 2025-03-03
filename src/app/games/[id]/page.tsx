@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { GameDispatch } from "@/redux/store";
+import { AppDispatch } from "@/redux/store";
 import { selectGame, selectLoading } from "@/redux/slices/games/gameSlice";
 import { fetchGameThunkById } from "@/redux/slices/games/gameThunk";
 import ChessBoardWithMoves from "@/components/ChessBoardWIthMoves";
@@ -14,7 +14,7 @@ export default function GamePage() {
   const params = useParams() || {};
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
 
-  const dispatch = useDispatch<GameDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const game = useSelector(selectGame);
   const loading = useSelector(selectLoading);
 

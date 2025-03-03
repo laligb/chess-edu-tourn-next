@@ -1,7 +1,7 @@
 "use client";
 
 import { selectGames, selectLoading } from "@/redux/slices/games/gameSlice";
-import { GameDispatch } from "@/redux/store";
+import { AppDispatch } from "@/redux/store";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -18,7 +18,7 @@ import { fetchGamesThunk } from "@/redux/slices/games/gameThunk";
 import ChessView from "@/components/ChessView";
 
 export default function GamesPage() {
-  const dispatch = useDispatch<GameDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const games = useSelector(selectGames);
   const loading = useSelector(selectLoading);
 
