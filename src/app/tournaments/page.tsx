@@ -33,6 +33,15 @@ export default function TournamentsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const fetchUpdatedTournaments = async () => {
+    try {
+      const data = await fetchTournaments();
+      setTournaments(data);
+    } catch (error) {
+      console.error("Error fetching updated tournaments:", error);
+    }
+  };
+
   const handleJoinWithdraw = async (tournamentId: string) => {
     if (!user) {
       console.log("User not logged in");
@@ -52,6 +61,7 @@ export default function TournamentsPage() {
         await joinTournament(tournamentId, userId);
         setUserJoinedTournaments((prevState) => [...prevState, tournamentId]);
       }
+      await fetchUpdatedTournaments();
     } catch (error) {
       console.error("Error in join/withdraw:", error);
     }
