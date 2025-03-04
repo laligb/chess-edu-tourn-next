@@ -28,10 +28,18 @@ export default function TournamentsPage() {
 
   useEffect(() => {
     fetchTournaments()
-      .then((data: Tournament[]) => setTournaments(data))
+      .then((data: Tournament[]) => {
+        setTournaments(data);
+        if (user) {
+          const joinedTournaments = data
+            .filter((tournament) => tournament.players.includes(user._id))
+            .map((tournament) => tournament._id);
+          setUserJoinedTournaments(joinedTournaments);
+        }
+      })
       .catch((error) => console.error("Error fetching tournaments:", error))
       .finally(() => setLoading(false));
-  }, []);
+  }, [user]);
 
   const fetchUpdatedTournaments = async () => {
     try {
