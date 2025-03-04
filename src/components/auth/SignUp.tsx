@@ -7,8 +7,8 @@ import { auth } from "@/services/firebaseConfig";
 import { apiClient } from "@/services/apiClient";
 import { updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
 import { AppDispatch } from "@/redux/store";
-import { loginUser } from "@/redux/slices/users/userSlice";
 import SignUpUI from "./SignUpUI";
+import { loginUser } from "@/redux/slices/users/userSlice";
 
 export default function SignUp() {
   const router = useRouter();
@@ -38,13 +38,15 @@ export default function SignUp() {
 
       await updateProfile(user, { displayName: name });
 
-      const token = await user.getIdToken();
+      await user.reload();
+      const updatedUser = auth.currentUser;
+      const token = await updatedUser!.getIdToken();
 
       const response = await apiClient.post(
         "/users/signup",
         {
-          _id: user.uid,
-          email: user.email,
+          _id: updatedUser!.uid,
+          email: updatedUser!.email,
           name: name,
           role: "user",
         },
@@ -53,9 +55,17 @@ export default function SignUp() {
 
       console.log("✅ User stored in MongoDB:", response.data);
 
-      dispatch(loginUser({ email, password }));
+      const loginResponse = await dispatch(
+        loginUser({ email, password })
+      ).unwrap();
 
-      router.push("/profile");
+      if (loginResponse) {
+        console.log(
+          "✅ User successfully logged in after signup:",
+          loginResponse
+        );
+        router.push("/profile");
+      }
     } catch (error: any) {
       console.error("❌ Signup Failed:", error);
       setError(error.message || "Signup failed. Please try again.");

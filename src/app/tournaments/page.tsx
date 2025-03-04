@@ -6,6 +6,10 @@ import TournamentTable from "@/components/TournamentTable";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid2";
+import TournamentCalendar from "@/components/TournamentCalendar";
+import TournamentMap from "@/components/TournamentMap";
+import TournamentStatistics from "@/components/TournamentStatistics";
 import { Tournament } from "@/types";
 
 export default function TournamentsPage() {
@@ -20,32 +24,45 @@ export default function TournamentsPage() {
   }, []);
 
   return (
-    <Box sx={{ width: "50%", margin: "auto", mt: 4 }}>
+    <Box sx={{ p: 4 }}>
       <Typography
         variant="h4"
-        sx={{ mb: 3, textAlign: "center", fontWeight: "bold" }}
+        sx={{
+          mb: 3,
+          fontWeight: "bold",
+          color: "#1976D2",
+          textAlign: "center",
+        }}
       >
-        Tournament List
+        Tournament Overview
       </Typography>
+      <Grid container spacing={4}>
+        <Grid xs={12} md={3}>
+          <TournamentCalendar tournaments={tournaments} />
+        </Grid>
+        <Grid xs={12} md={3}>
+          <TournamentStatistics tournaments={tournaments} />
+        </Grid>
+        <Grid xs={12} md={3}>
+          <TournamentMap tournaments={tournaments} />
+        </Grid>
+      </Grid>
 
       {loading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "300px",
-          }}
-        >
+        <Box display="flex" justifyContent="center" alignItems="center">
           <CircularProgress />
         </Box>
       ) : tournaments.length > 0 ? (
-        <TournamentTable tournaments={tournaments} />
+        <Grid container spacing={4}>
+          {/* Left Column: Tournament List (Bigger Size) */}
+          {/* <Grid xs={12} sm={12} md={8}> */}
+          <TournamentTable tournaments={tournaments} />
+          {/* </Grid> */}
+
+          {/* Right Column: Calendar (Top), then Stats, then Map */}
+        </Grid>
       ) : (
-        <Typography
-          variant="h6"
-          sx={{ textAlign: "center", mt: 2, color: "gray" }}
-        >
+        <Typography variant="h6" textAlign="center">
           No tournaments found.
         </Typography>
       )}
