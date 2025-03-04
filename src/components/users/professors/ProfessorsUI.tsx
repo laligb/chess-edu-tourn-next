@@ -1,5 +1,5 @@
 import {
-  Grid2,
+  Grid,
   Card,
   CardContent,
   Avatar,
@@ -15,9 +15,12 @@ import {
   DialogActions,
   IconButton,
 } from "@mui/material";
+import { red, yellow } from "@mui/material/colors";
+
 import ChatIcon from "@mui/icons-material/Chat";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
+import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
 
 interface Professor {
   id: string;
@@ -33,6 +36,10 @@ interface ProfessorsUIProps {
 const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
   const [openChat, setOpenChat] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [ratings, setRatings] = useState<{ [key: string]: number }>({});
+  const [likedProfessors, setLikedProfessors] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const handleOpenChat = (professorId: string) => {
     setOpenChat(professorId);
@@ -41,6 +48,14 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
   const handleCloseChat = () => {
     setOpenChat(null);
     setMessage(""); // Clear message field when closing
+  };
+
+  const handleRating = (id: string, rating: number) => {
+    setRatings((prev) => ({ ...prev, [id]: rating }));
+  };
+
+  const toggleLike = (id: string) => {
+    setLikedProfessors((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
@@ -67,16 +82,10 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
           Meet Our Professors
         </Typography>
 
-        <Grid2
-          container
-          spacing={4}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-          component="div"
-          justifyContent="center"
-        >
+        <Grid container spacing={4} justifyContent="center">
           {professors.length > 0 ? (
             professors.map((professor) => (
-              <Grid2 xs={4} sm={4} md={3} key={professor.id} component="div">
+              <Grid item xs={12} sm={6} md={4} key={professor.id}>
                 <Card
                   sx={{
                     boxShadow: 5,
@@ -93,10 +102,7 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                       "https://randomuser.me/api/portraits/men/75.jpg"
                     }
                     alt={professor.name}
-                    sx={{
-                      borderTopLeftRadius: 12,
-                      borderTopRightRadius: 12,
-                    }}
+                    sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
                   />
                   <CardContent sx={{ textAlign: "center", p: 3 }}>
                     <Avatar
@@ -116,7 +122,38 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                     <Typography variant="h6" fontWeight="bold" color="primary">
                       {professor.name}
                     </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {professor.email}
+                    </Typography>
 
+                    {/* Rating System */}
+                    <Box display="flex" justifyContent="center" mt={1}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <IconButton
+                          key={star}
+                          onClick={() => handleRating(professor.id, star)}
+                        >
+                          {ratings[professor.id] >= star ? (
+                            <FaStar style={{ color: yellow[700] }} />
+                          ) : (
+                            <FaRegStar style={{ color: yellow[700] }} />
+                          )}
+                        </IconButton>
+                      ))}
+                    </Box>
+
+                    {/* Like Button */}
+                    <Box display="flex" justifyContent="center" mt={1}>
+                      <IconButton onClick={() => toggleLike(professor.id)}>
+                        {likedProfessors[professor.id] ? (
+                          <FaHeart style={{ color: red[500] }} />
+                        ) : (
+                          <FaRegHeart style={{ color: red[500] }} />
+                        )}
+                      </IconButton>
+                    </Box>
+
+                    {/* Chat Button */}
                     <Button
                       variant="contained"
                       size="small"
@@ -128,14 +165,14 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                     </Button>
                   </CardContent>
                 </Card>
-              </Grid2>
+              </Grid>
             ))
           ) : (
             <Typography align="center" sx={{ mt: 2 }}>
               No professors available
             </Typography>
           )}
-        </Grid2>
+        </Grid>
       </Paper>
 
       {/* Chat Dialog */}

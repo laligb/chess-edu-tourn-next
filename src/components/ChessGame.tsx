@@ -8,11 +8,21 @@ const ChessGame = () => {
   const { fen, onDrop, onSquareClick } = useChessGame();
 
   return (
-    <Box>
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "500px",
+        height: "500px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Chessboard
         position={fen}
         onPieceDrop={onDrop}
         onSquareClick={onSquareClick}
+        boardWidth={500}
       />
     </Box>
   );

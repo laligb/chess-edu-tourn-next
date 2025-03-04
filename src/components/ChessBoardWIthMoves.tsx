@@ -1,14 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Grid, Paper } from "@mui/material";
 import MoveList from "@/components/MoveList";
 import { useSelector } from "react-redux";
 import { selectMoves } from "@/redux/slices/games/gameSlice";
-import ChessGame from "@/components/ChessGame";
 
 interface ChessBoardWithMovesProps {
   player1: string;
   player2: string;
   result?: string;
-
   chessBoard: React.ReactNode;
 }
 
@@ -16,62 +14,101 @@ function ChessBoardWithMoves({
   player1,
   player2,
   result,
+  chessBoard,
 }: ChessBoardWithMovesProps) {
   const moves = useSelector(selectMoves);
+
   return (
     <Box
       sx={{
         display: "flex",
-        flexDirection: "row",
-        borderRadius: "8px",
-        alignItems: "flex-start",
         justifyContent: "center",
+        alignItems: "flex-start",
         width: "100%",
-        maxWidth: "900px",
+        maxWidth: "1000px",
         margin: "auto",
-        border: "20px solid white",
+        padding: 2,
+        gap: 2,
       }}
     >
       <Box
         sx={{
-          width: "80%",
-          height: "80%",
           display: "flex",
           flexDirection: "column",
-          minWidth: "400px",
-          minHeight: "400px",
-
           alignItems: "center",
+          gap: 1,
         }}
       >
-        <Box sx={{ width: "100%" }}>
-          <ChessGame />
+        <Paper
+          elevation={3}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "6px 20px",
+            borderRadius: "20px",
+            backgroundColor: "primary.main",
+            color: "white",
+            fontWeight: "bold",
+            minWidth: "180px",
+          }}
+        >
+          {player2} {result ? (result === "0-1" ? "(1)" : "(0)") : "(*)"}
+        </Paper>
+
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: "500px",
+            aspectRatio: "1",
+            backgroundColor: "white",
+            borderRadius: "10px",
+            boxShadow: 3,
+            padding: 1,
+          }}
+        >
+          {chessBoard}
         </Box>
+
+        <Paper
+          elevation={3}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "6px 20px",
+            borderRadius: "20px",
+            backgroundColor: "secondary.main",
+            color: "white",
+            fontWeight: "bold",
+            minWidth: "180px",
+          }}
+        >
+          {player1} {result ? (result === "1-0" ? "(1)" : "(0)") : "(*)"}
+        </Paper>
       </Box>
 
       <Box
         sx={{
-          width: "300px",
-          height: "500px",
-
-          overflowY: "auto",
-          flexShrink: 0,
+          width: { xs: "100%", md: "40%" },
+          minWidth: "250px",
+          padding: "12px",
+          borderRadius: "10px",
+          backgroundColor: "background.paper",
+          boxShadow: 1,
         }}
       >
-        <Box
+        <Typography
+          variant="h6"
           sx={{
-            width: "100%",
+            fontWeight: "bold",
             textAlign: "center",
-            mb: 2,
+            color: "text.primary",
+            marginBottom: 1,
           }}
         >
-          <Typography variant="h6">
-            {player1} vs {player2}
-          </Typography>
-          <Typography variant="body1" color="gray">
-            {result || "Game in Progress"}
-          </Typography>
-        </Box>
+          Move List
+        </Typography>
         <MoveList moves={moves} />
       </Box>
     </Box>

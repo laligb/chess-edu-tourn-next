@@ -41,7 +41,9 @@ export default function RootLayout({
               flexDirection: "column",
             }}
           >
-            <Container sx={{ flex: 1, mt: 4, px: 0 }}>{children}</Container>
+            <Container disableGutters sx={{ flex: 1, mt: 4, px: 0 }}>
+              {children}
+            </Container>
             <Footer />
           </Box>
         </Providers>

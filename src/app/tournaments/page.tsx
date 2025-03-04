@@ -6,7 +6,7 @@ import TournamentTable from "@/components/TournamentTable";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import TournamentCalendar from "@/components/TournamentCalendar";
 import TournamentMap from "@/components/TournamentMap";
 import TournamentStatistics from "@/components/TournamentStatistics";
@@ -24,7 +24,7 @@ export default function TournamentsPage() {
   }, []);
 
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{}}>
       <Typography
         variant="h4"
         sx={{
@@ -36,17 +36,6 @@ export default function TournamentsPage() {
       >
         Tournament Overview
       </Typography>
-      <Grid container spacing={4}>
-        <Grid xs={12} md={3}>
-          <TournamentCalendar tournaments={tournaments} />
-        </Grid>
-        <Grid xs={12} md={3}>
-          <TournamentStatistics tournaments={tournaments} />
-        </Grid>
-        <Grid xs={12} md={3}>
-          <TournamentMap tournaments={tournaments} />
-        </Grid>
-      </Grid>
 
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center">
@@ -54,12 +43,23 @@ export default function TournamentsPage() {
         </Box>
       ) : tournaments.length > 0 ? (
         <Grid container spacing={4}>
-          {/* Left Column: Tournament List (Bigger Size) */}
-          {/* <Grid xs={12} sm={12} md={8}> */}
-          <TournamentTable tournaments={tournaments} />
-          {/* </Grid> */}
+          {/* Left Column: Tournament List */}
+          <Grid item xs={12} md={8}>
+            <TournamentTable tournaments={tournaments} />
+          </Grid>
 
-          {/* Right Column: Calendar (Top), then Stats, then Map */}
+          {/* Right Column: Calendar, Statistics, and Map */}
+          <Grid item xs={12} md={4} container spacing={2}>
+            <Grid item xs={12}>
+              <TournamentCalendar tournaments={tournaments} />
+            </Grid>
+            <Grid item xs={12}>
+              <TournamentStatistics tournaments={tournaments} />
+            </Grid>
+            <Grid item xs={12}>
+              <TournamentMap tournaments={tournaments} />
+            </Grid>
+          </Grid>
         </Grid>
       ) : (
         <Typography variant="h6" textAlign="center">

@@ -24,13 +24,6 @@ export default function GamePage() {
 
   return (
     <Box sx={{ width: "80%", margin: "auto", mt: 4 }}>
-      <Typography
-        variant="h4"
-        sx={{ mb: 3, textAlign: "center", fontWeight: "bold" }}
-      >
-        Game Details
-      </Typography>
-
       {loading ? (
         <Box
           sx={{
