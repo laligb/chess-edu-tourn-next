@@ -46,13 +46,6 @@ Chess Education Tournament is a frontend application for managing chess tourname
 
 5. The frontend will be available at `http://localhost:3001`. Ensure the API is running locally at `localhost:3000` to fetch and push data.
 
-## Features
-
-- Tournament management interface for professors.
-- Player pairing system.
-- Educational content and curriculum tracking.
-- Authenticated user interface for professors and students.
-
 ## How to Push Data to Localhost API
 
 Ensure that both the API (`chess-education-api`) and the frontend (`chess-edu-tourn-next`) are running locally.
