@@ -9,7 +9,7 @@ Chess Education Tournament is a frontend application for managing chess tourname
 - **Next.js**: React-based framework for building frontend applications.
 - **React**: JavaScript library for building user interfaces.
 - **Axios**: Promise-based HTTP client for making API requests.
-- **JWT Authentication**: Manages authentication for secure access to tournament and educational data.
+- **Firebase Authentification**: Manages authentication for secure access to users.
 
 ## Setup and Run Locally
 
