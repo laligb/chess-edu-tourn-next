@@ -19,24 +19,19 @@ export default function TournamentMap({ tournaments }: TournamentMapProps) {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [0, 0], // Default center if no valid locations
+      center: [0, 0],
       zoom: 2,
     });
 
     tournaments.forEach((tournament) => {
-      if (
-        tournament.location &&
-        tournament.location.lng !== undefined &&
-        tournament.location.lat !== undefined
-      ) {
+      const { location } = tournament;
+      if (location?.latitude && location?.longitude) {
         new mapboxgl.Marker()
-          .setLngLat([tournament.location.lng, tournament.location.lat])
+          .setLngLat([location.longitude, location.latitude])
           .setPopup(
             new mapboxgl.Popup().setHTML(`<strong>${tournament.title}</strong>`)
           )
           .addTo(map);
-      } else {
-        console.warn(`Tournament "${tournament.title}" has no valid location.`);
       }
     });
 
@@ -48,7 +43,10 @@ export default function TournamentMap({ tournaments }: TournamentMapProps) {
       <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
         Tournament Locations
       </Typography>
-      <div ref={mapContainer} style={{ width: "100%", borderRadius: "8px" }} />
+      <div
+        ref={mapContainer}
+        style={{ width: "100%", height: "400px", borderRadius: "8px" }}
+      />
     </Paper>
   );
 }

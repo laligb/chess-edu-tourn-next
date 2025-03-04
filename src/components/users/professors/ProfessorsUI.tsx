@@ -14,11 +14,14 @@ import {
   TextField,
   DialogActions,
   IconButton,
+  InputAdornment,
 } from "@mui/material";
 import { red, yellow } from "@mui/material/colors";
 
 import ChatIcon from "@mui/icons-material/Chat";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
 import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
 
@@ -40,6 +43,7 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
   const [likedProfessors, setLikedProfessors] = useState<{
     [key: string]: boolean;
   }>({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleOpenChat = (professorId: string) => {
     setOpenChat(professorId);
@@ -47,7 +51,7 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
 
   const handleCloseChat = () => {
     setOpenChat(null);
-    setMessage(""); // Clear message field when closing
+    setMessage("");
   };
 
   const handleRating = (id: string, rating: number) => {
@@ -57,6 +61,18 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
   const toggleLike = (id: string) => {
     setLikedProfessors((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+  };
+
+  const filteredProfessors = professors.filter((professor) =>
+    professor.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Box
@@ -74,6 +90,36 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
           borderRadius: 3,
         }}
       >
+        <Box display="flex" justifyContent="center" mb={3}>
+          <TextField
+            variant="outlined"
+            placeholder="Search Professors..."
+            size="small"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            sx={{
+              width: "100%",
+              maxWidth: "400px",
+              backgroundColor: "white",
+              borderRadius: 1,
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="primary" />
+                </InputAdornment>
+              ),
+              endAdornment: searchQuery && (
+                <InputAdornment position="end">
+                  <IconButton size="small" onClick={handleClearSearch}>
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+
         <Typography
           variant="h4"
           align="center"
@@ -83,8 +129,8 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
         </Typography>
 
         <Grid container spacing={4} justifyContent="center">
-          {professors.length > 0 ? (
-            professors.map((professor) => (
+          {filteredProfessors.length > 0 ? (
+            filteredProfessors.map((professor) => (
               <Grid item xs={12} sm={6} md={4} key={professor.id}>
                 <Card
                   sx={{
@@ -126,7 +172,6 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                       {professor.email}
                     </Typography>
 
-                    {/* Rating System */}
                     <Box display="flex" justifyContent="center" mt={1}>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <IconButton
@@ -142,7 +187,6 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                       ))}
                     </Box>
 
-                    {/* Like Button */}
                     <Box display="flex" justifyContent="center" mt={1}>
                       <IconButton onClick={() => toggleLike(professor.id)}>
                         {likedProfessors[professor.id] ? (
@@ -153,7 +197,6 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                       </IconButton>
                     </Box>
 
-                    {/* Chat Button */}
                     <Button
                       variant="contained"
                       size="small"
@@ -169,13 +212,12 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
             ))
           ) : (
             <Typography align="center" sx={{ mt: 2 }}>
-              No professors available
+              No professors found.
             </Typography>
           )}
         </Grid>
       </Paper>
 
-      {/* Chat Dialog */}
       <Dialog
         open={!!openChat}
         onClose={handleCloseChat}

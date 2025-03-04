@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Table,
@@ -18,24 +20,22 @@ import { Tournament } from "@/types";
 
 type TournamentTableProps = {
   tournaments: Tournament[];
+  userJoinedTournaments: string[];
+  handleJoinWithdraw: (tournamentId: string) => void;
 };
 
-export default function TournamentTable({ tournaments }: TournamentTableProps) {
-  const handleJoin = (tournamentId: string) => {
-    console.log(`Joining tournament with ID: ${tournamentId}`);
-  };
-
+export default function TournamentTable({
+  tournaments,
+  userJoinedTournaments,
+  handleJoinWithdraw,
+}: TournamentTableProps) {
   return (
     <Box
       sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 4 }}
     >
       <TableContainer
         component={Paper}
-        sx={{
-          boxShadow: 4,
-          borderRadius: 3,
-          width: "100%",
-        }}
+        sx={{ boxShadow: 4, borderRadius: 3, width: "100%" }}
       >
         <Typography
           variant="h5"
@@ -56,7 +56,7 @@ export default function TournamentTable({ tournaments }: TournamentTableProps) {
                 Title
               </TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                City
+                Location
               </TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>
                 Date
@@ -99,7 +99,7 @@ export default function TournamentTable({ tournaments }: TournamentTableProps) {
                 <TableCell component="th" scope="row">
                   <Typography fontWeight="bold">{tournament.title}</Typography>
                 </TableCell>
-                <TableCell>{tournament.city}</TableCell>
+                <TableCell>{tournament.location.name}</TableCell>
                 <TableCell>
                   {new Date(tournament.date).toLocaleDateString()}
                 </TableCell>
@@ -142,10 +142,16 @@ export default function TournamentTable({ tournaments }: TournamentTableProps) {
                 <TableCell align="center">
                   <Button
                     variant="contained"
-                    color="secondary"
-                    onClick={() => handleJoin(tournament._id)}
+                    color={
+                      userJoinedTournaments.includes(tournament._id)
+                        ? "secondary"
+                        : "primary"
+                    }
+                    onClick={() => handleJoinWithdraw(tournament._id)}
                   >
-                    Join
+                    {userJoinedTournaments.includes(tournament._id)
+                      ? "Withdraw"
+                      : "Join"}
                   </Button>
                 </TableCell>
               </TableRow>

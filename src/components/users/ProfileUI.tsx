@@ -34,17 +34,38 @@ const ProfileUI = ({ user, onLogout }: ProfileUIProps) => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
+      padding={4}
     >
-      <Card sx={{ maxWidth: 600, width: "100%", padding: 3, boxShadow: 3 }}>
-        <Box display="flex" flexDirection="column" alignItems="center">
+      <Card
+        sx={{
+          display: "flex",
+          width: "80%",
+          maxWidth: "900px",
+          boxShadow: 4,
+          borderRadius: 3,
+          overflow: "hidden",
+        }}
+      >
+        <Box
+          sx={{
+            width: "35%",
+            backgroundColor: "primary.main",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 3,
+            color: "white",
+          }}
+        >
           <Avatar
             src={"/default-avatar.png"}
-            sx={{ width: 120, height: 120, mb: 2 }}
+            sx={{ width: 150, height: 150, mb: 2, border: "4px solid white" }}
           />
           <Typography variant="h5" fontWeight="bold">
             {user.name || "John Doe"}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
+          <Typography variant="subtitle1">
             {user.email || "johndoe@example.com"}
           </Typography>
           <Chip
@@ -53,14 +74,18 @@ const ProfileUI = ({ user, onLogout }: ProfileUIProps) => {
               mt: 1,
               bgcolor: getRoleColor(user.role),
               color: "white",
+              fontSize: "14px",
             }}
           />
         </Box>
 
-        <Divider sx={{ my: 2 }} />
-
-        <CardContent>
+        <CardContent sx={{ flex: 1, padding: 4 }}>
           <Stack spacing={2}>
+            <Typography variant="h6" fontWeight="bold" color="primary">
+              Profile Information
+            </Typography>
+            <Divider />
+
             <Box display="flex" justifyContent="space-between">
               <Typography variant="body1" fontWeight="bold">
                 Name:
@@ -84,12 +109,13 @@ const ProfileUI = ({ user, onLogout }: ProfileUIProps) => {
               </Box>
             )}
           </Stack>
-        </CardContent>
 
-        <>
+          <Divider sx={{ my: 3 }} />
+
+          {/* Tournaments */}
           <Typography
             variant="h6"
-            sx={{ mt: 2, mb: 1 }}
+            color="primary"
             display="flex"
             alignItems="center"
             gap={1}
@@ -101,13 +127,13 @@ const ProfileUI = ({ user, onLogout }: ProfileUIProps) => {
               <ListItemText primary="No tournaments registered yet" />
             </ListItem>
           </List>
-          <Divider sx={{ my: 2 }} />
-        </>
 
-        <>
+          <Divider sx={{ my: 2 }} />
+
+          {/* Friends */}
           <Typography
             variant="h6"
-            sx={{ mt: 2, mb: 1 }}
+            color="primary"
             display="flex"
             alignItems="center"
             gap={1}
@@ -119,20 +145,19 @@ const ProfileUI = ({ user, onLogout }: ProfileUIProps) => {
               <ListItemText primary="No friends added yet" />
             </ListItem>
           </List>
-        </>
 
-        <Button
-          variant="contained"
-          startIcon={<EditIcon />}
-          fullWidth
-          sx={{ mt: 2 }}
-        >
-          Edit Profile
-        </Button>
+          <Divider sx={{ my: 3 }} />
 
-        <Button variant="contained" color="error" fullWidth onClick={onLogout}>
-          Logout
-        </Button>
+          {/* Buttons */}
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <Button variant="contained" startIcon={<EditIcon />}>
+              Edit Profile
+            </Button>
+            <Button variant="contained" color="error" onClick={onLogout}>
+              Logout
+            </Button>
+          </Stack>
+        </CardContent>
       </Card>
     </Box>
   );

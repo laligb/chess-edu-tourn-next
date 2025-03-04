@@ -1,20 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { fetchTournaments } from "@/services/tournamentService";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  fetchTournaments,
+  joinTournament,
+  withdrawTournament,
+} from "@/services/tournamentService";
 import TournamentTable from "@/components/TournamentTable";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TournamentCalendar from "@/components/TournamentCalendar";
-import TournamentMap from "@/components/TournamentMap";
 import TournamentStatistics from "@/components/TournamentStatistics";
 import { Tournament } from "@/types";
+import { RootState } from "@/redux/store";
 
 export default function TournamentsPage() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
+  const [userJoinedTournaments, setUserJoinedTournaments] = useState<string[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
+
+  const user = useSelector((state: RootState) => state.user.user);
 
   useEffect(() => {
     fetchTournaments()
@@ -22,6 +32,30 @@ export default function TournamentsPage() {
       .catch((error) => console.error("Error fetching tournaments:", error))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleJoinWithdraw = async (tournamentId: string) => {
+    if (!user) {
+      console.log("User not logged in");
+      return;
+    }
+
+    const isJoined = userJoinedTournaments.includes(tournamentId);
+    const userId = user._id;
+
+    try {
+      if (isJoined) {
+        await withdrawTournament(tournamentId, userId);
+        setUserJoinedTournaments((prevState) =>
+          prevState.filter((id) => id !== tournamentId)
+        );
+      } else {
+        await joinTournament(tournamentId, userId);
+        setUserJoinedTournaments((prevState) => [...prevState, tournamentId]);
+      }
+    } catch (error) {
+      console.error("Error in join/withdraw:", error);
+    }
+  };
 
   return (
     <Box sx={{}}>
@@ -42,23 +76,27 @@ export default function TournamentsPage() {
           <CircularProgress />
         </Box>
       ) : tournaments.length > 0 ? (
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           {/* Left Column: Tournament List */}
           <Grid item xs={12} md={8}>
-            <TournamentTable tournaments={tournaments} />
+            <TournamentTable
+              tournaments={tournaments}
+              userJoinedTournaments={userJoinedTournaments}
+              handleJoinWithdraw={handleJoinWithdraw} // Pass the updated function
+            />
           </Grid>
 
-          {/* Right Column: Calendar, Statistics, and Map */}
-          <Grid item xs={12} md={4} container spacing={2}>
+          {/* Right Column: Calendar, Statistics */}
+          <Grid item xs={12} md={4} container spacing={1}>
             <Grid item xs={12}>
               <TournamentCalendar tournaments={tournaments} />
             </Grid>
             <Grid item xs={12}>
-              <TournamentStatistics tournaments={tournaments} />
+              {/* TournamentMap */}
             </Grid>
-            <Grid item xs={12}>
-              <TournamentMap tournaments={tournaments} />
-            </Grid>
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <TournamentStatistics tournaments={tournaments} />
           </Grid>
         </Grid>
       ) : (

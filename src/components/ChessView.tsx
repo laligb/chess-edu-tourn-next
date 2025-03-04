@@ -14,10 +14,11 @@ export default function ChessView({ pgn }: ChessGameProps) {
 
   useEffect(() => {
     if (pgn) {
+      console.log("PGN Loaded:", pgn);
       const chess = new Chess();
       chess.loadPgn(pgn);
       setGame(chess);
-      console.log("PGN Loaded:", pgn);
+      console.log("FEN CURRENT:", game.fen);
     }
   }, [pgn]);
 
