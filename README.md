@@ -1,4 +1,4 @@
-# Chess Education Tournament Next.js
+# Chess Next.js
 
 ## Overview
 
