@@ -10,7 +10,7 @@ export const fetchTournamentById = async (id: string) => {
   return response.data;
 };
 
-// Join tournament
+
 export const joinTournament = async (tournamentId: string, userId: string) => {
   const response = await apiClient.post(`/tournaments/${tournamentId}/join`, {
     userId,
@@ -18,7 +18,6 @@ export const joinTournament = async (tournamentId: string, userId: string) => {
   return response.data;
 };
 
-// Withdraw from tournament
 export const withdrawTournament = async (
   tournamentId: string,
   userId: string
