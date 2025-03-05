@@ -1,26 +1,7 @@
 "use client";
 
-import { User } from "@/types";
-import {
-  Grid,
-  Typography,
-  Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
-  IconButton,
-  InputAdornment,
-  Pagination,
-} from "@mui/material";
-
-import UserCard from "@/components/cards/UserCard";
 import useUsersFetches from "@/hooks/useUsersFetches";
 import useChat from "@/hooks/useChat";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
 import useSearch from "@/hooks/useSearch";
 import { useState } from "react";
 import UsersListUI from "./UsersListUI";
