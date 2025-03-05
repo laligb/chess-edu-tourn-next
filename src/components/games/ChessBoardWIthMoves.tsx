@@ -1,5 +1,5 @@
 import { Box, Typography, Grid, Paper } from "@mui/material";
-import MoveList from "@/components/MoveList";
+import MoveList from "@/components/games/MoveList";
 import { useSelector } from "react-redux";
 import { selectMoves } from "@/redux/slices/games/gameSlice";
 

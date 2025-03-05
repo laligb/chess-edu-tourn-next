@@ -26,13 +26,20 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import useAuth from "@/hooks/useAuth";
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
+  const { user, handleLogout } = useAuth();
+
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+
+  if (!user) {
+    return <Box>Redirecting to login...</Box>;
+  }
 
   const toggleDrawer = () => {
     setSidebarOpen(!sidebarOpen);
@@ -75,7 +82,7 @@ const Sidebar = () => {
               Settings
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleLogout}>
               <LogoutIcon sx={{ mr: 1, color: "red" }} />
               Logout
             </MenuItem>
