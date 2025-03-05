@@ -1,13 +1,13 @@
 "use client";
 
-"use client";
-
 import { useEffect, useState } from "react";
 import ProfessorsUI from "./ProfessorsUI";
 import { useDispatch, useSelector } from "react-redux";
 import useChat from "@/hooks/useChat";
-import { User } from "@/types";
+import { Group, User } from "@/types";
 import { getUsers } from "@/redux/slices/users/userSlice";
+import { RootState } from "@/redux/store";
+import { getGroups } from "@/redux/slices/groups/groupSlice";
 
 const Professors = () => {
   const [isClient, setIsClient] = useState(false);
@@ -15,7 +15,11 @@ const Professors = () => {
     useChat();
 
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.user.users);
+  const users = useSelector((state: RootState) => state.user.users);
+  const groups = useSelector(
+    (state: RootState) => state.group.groups
+  ) as Group[];
+
   const professors: User[] = users.filter((user) => user.role === "professor");
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,9 +29,11 @@ const Professors = () => {
     if (users.length === 0) {
       dispatch(getUsers());
     }
-    console.log(users);
-    console.log(professors);
-  }, [dispatch, users, professors]);
+
+    if (!groups || groups.length === 0) {
+      dispatch(getGroups());
+    }
+  }, [dispatch, users.length, groups]);
 
   if (!isClient) return <p>Loading professors...</p>;
 
@@ -43,6 +49,36 @@ const Professors = () => {
     professor.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const getStudentCount = (professorId: string) => {
+    let studentCount = 0;
+
+    const professor = professors.find((prof) => prof._id === professorId);
+    if (!professor) {
+      console.log(`Professor with ID ${professorId} not found`);
+      return 0;
+    }
+
+    if (!professor.groups || professor.groups.length === 0) {
+      console.log(`No groups found for professor with ID ${professorId}`);
+      return 0;
+    }
+
+    professor.groups.forEach((groupId) => {
+      const group = groups.find((group) => group._id === groupId);
+      if (group) {
+        if (group.students) {
+          studentCount += group.students.length;
+        } else {
+          console.log(`No students in group: ${group.name}`);
+        }
+      } else {
+        console.log(`Group with ID ${groupId} not found`);
+      }
+    });
+
+    return studentCount;
+  };
+
   return (
     <ProfessorsUI
       professors={filteredProfessors}
@@ -54,6 +90,8 @@ const Professors = () => {
       handleCloseChat={handleCloseChat}
       setMessage={setMessage}
       message={message}
+      getStudentCount={getStudentCount}
+      groups={groups}
     />
   );
 };

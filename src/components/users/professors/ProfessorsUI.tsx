@@ -2,7 +2,6 @@ import {
   Grid,
   Card,
   CardContent,
-  Avatar,
   Typography,
   CardMedia,
   Box,
@@ -16,15 +15,15 @@ import {
   IconButton,
   InputAdornment,
 } from "@mui/material";
-import { red, yellow } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 
 import ChatIcon from "@mui/icons-material/Chat";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
-import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
-import { User } from "@/types";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Group, User } from "@/types";
 
 export interface ProfessorsUIProps {
   professors: User[];
@@ -36,6 +35,8 @@ export interface ProfessorsUIProps {
   handleCloseChat: () => void;
   setMessage: (message: string) => void;
   message: string;
+  getStudentCount: (professorId: string) => number;
+  groups: Group[];
 }
 
 const ProfessorsUI = ({
@@ -48,12 +49,9 @@ const ProfessorsUI = ({
   handleCloseChat,
   setMessage,
   message,
+  getStudentCount,
+  groups,
 }: ProfessorsUIProps) => {
-  const handleRating = (id: string, rating: number) => {
-    setRatings((prev) => ({ ...prev, [id]: rating }));
-  };
-
-  const [ratings, setRatings] = useState<{ [key: string]: number }>({});
   const [likedProfessors, setLikedProfessors] = useState<{
     [key: string]: boolean;
   }>({});
@@ -146,27 +144,16 @@ const ProfessorsUI = ({
                       {professor.email}
                     </Typography>
 
-                    {/* <Box display="flex" justifyContent="center" mt={1}>
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <IconButton
-                          key={star}
-                          onClick={() => handleRating(professor._id, star)}
-                        >
-                          {ratings[professor._id] >= star ? (
-                            <FaStar style={{ color: yellow[700] }} />
-                          ) : (
-                            <FaRegStar style={{ color: yellow[700] }} />
-                          )}
-                        </IconButton>
-                      ))}
-                    </Box> */}
                     <Box display="flex" justifyContent="center" mt={1}>
                       <Typography
                         variant="h6"
                         fontWeight="bold"
                         color="primary"
                       >
-                        Students: {professor.groups.length}
+                        Students:
+                        {groups && groups.length > 0
+                          ? getStudentCount(professor._id)
+                          : 0}
                       </Typography>
                     </Box>
 
@@ -214,7 +201,7 @@ const ProfessorsUI = ({
             alignItems: "center",
           }}
         >
-          Chat with {professors.find((p) => p.id === openChat)?.name}
+          Chat with {professors.find((p) => p._id === openChat)?.name}
           <IconButton onClick={handleCloseChat}>
             <CloseIcon />
           </IconButton>

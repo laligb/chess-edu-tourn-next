@@ -28,3 +28,10 @@ export type User = {
   games: string[];
   groups: string[];
 };
+
+export type Group = {
+  _id: string;
+  name: string;
+  professor: string;
+  students: string[];
+};

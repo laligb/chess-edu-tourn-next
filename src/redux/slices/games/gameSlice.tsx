@@ -44,7 +44,6 @@ const gameSlice = createSlice({
       if (move) {
         state.fen = chess.fen();
         state.moves = [...state.moves, move.san];
-        // state.moves = chess.history();
       }
     },
     getLegalMoves: (state, action: PayloadAction<{ square: Square }>) => {
