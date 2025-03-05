@@ -1,33 +1,11 @@
-// "use client";
+"use client";
 
-// import { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
-// import { AppDispatch, RootState } from "@/redux/store";
-// import { useDispatch } from "react-redux";
-// import { fetchProfessors } from "@/redux/slices/professors/professorSlice";
-// import ProfessorsUI from "./ProfessorsUI";
-
-// const Professors = () => {
-//   const dispatch = useDispatch<AppDispatch>();
-//   const professors = useSelector((state: RootState) => state.professors.list);
-//   const loading = useSelector((state: RootState) => state.professors.loading);
-//   const [isClient, setIsClient] = useState(false);
-
-//   useEffect(() => {
-//     setIsClient(true);
-//     dispatch(fetchProfessors()); // Fetch professors on mount
-//   }, [dispatch]);
-
-//   if (!isClient || loading) return <p>Loading professors...</p>;
-
-//   return <ProfessorsUI professors={professors} />;
-// };
-
-// export default Professors;
 "use client";
 
 import { useEffect, useState } from "react";
 import ProfessorsUI from "./ProfessorsUI";
+import { getUsers } from "@/redux/slices/users/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const mockProfessors = [
   {
@@ -112,11 +90,15 @@ const mockProfessors = [
 
 const Professors = () => {
   const [isClient, setIsClient] = useState(false);
-  const [professors] = useState(mockProfessors); // Using mock data
+
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.user.users);
+
+  const professors = users.filter((user) => user.role === "professor");
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+  }, [dispatch, users]);
 
   if (!isClient) return <p>Loading professors...</p>;
 
