@@ -13,7 +13,7 @@ export const WelcomePage = () => {
     <div style={{ padding: "20px" }}>
       {/* Heading with blue color */}
       <Typography variant="h1" color="primary" gutterBottom>
-        Welcome to the Chess Tournament Hub
+        Welcome to the Chess Hub
       </Typography>
       <Typography variant="h5" gutterBottom style={{ marginBottom: "30px" }}>
         Join chess tournaments, find chess professors, and improve your skills.
