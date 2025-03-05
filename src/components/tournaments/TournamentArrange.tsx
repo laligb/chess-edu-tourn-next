@@ -19,21 +19,20 @@ export default function TournamentArrange() {
       <Typography
         variant="h4"
         sx={{
-          mb: 3,
+          mb: 6,
+          mt: 10,
           fontWeight: "bold",
           color: "#1976D2",
           textAlign: "center",
         }}
-      >
-        Tournament Overview
-      </Typography>
+      ></Typography>
 
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center">
           <CircularProgress />
         </Box>
       ) : tournaments.length > 0 ? (
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           <Grid item xs={12} md={8}>
             <TournamentTable
               tournaments={tournaments}
@@ -46,7 +45,6 @@ export default function TournamentArrange() {
             <Grid item xs={12}>
               <TournamentCalendar tournaments={tournaments} />
             </Grid>
-            <Grid item xs={12}></Grid>
           </Grid>
           <Grid item xs={12} md={12}>
             <TournamentStatistics tournaments={tournaments} />
