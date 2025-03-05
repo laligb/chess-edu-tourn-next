@@ -3,8 +3,7 @@ import mapboxgl from "mapbox-gl";
 import { Paper, Typography } from "@mui/material";
 import { Tournament } from "@/types";
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoibGFsaWdiIiwiYSI6ImNrejhqdTMydzB3a2Eyb211cjJyZG95NmcifQ.gkDhUGob--lX_-nsAnMS0A";
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 type TournamentMapProps = {
   tournaments: Tournament[];
