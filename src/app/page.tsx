@@ -6,6 +6,7 @@ import ChatSocket from "@/components/socketComponents/ChatSocket";
 import { checkUserSession } from "@/redux/slices/users/userSlice";
 import { useEffect } from "react";
 import { AppDispatch } from "@/redux/store";
+import { WelcomePage } from "@/components/WelcomePage";
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,7 +18,10 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <ChatSocket />
+        <br></br>
+        <br></br>
+        <WelcomePage />
+        {/* <ChatSocket /> */}
       </main>
     </div>
   );
