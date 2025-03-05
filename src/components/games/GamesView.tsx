@@ -16,7 +16,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGamesThunk } from "@/redux/slices/games/gameThunk";
-import ChessView from "@/components/ChessView";
+import ChessView from "@/components/games/ChessView";
 
 export default function GamesView() {
   const dispatch = useDispatch<AppDispatch>();

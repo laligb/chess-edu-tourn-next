@@ -14,7 +14,7 @@ const Footer = () => {
       }}
     >
       <Typography variant="body2">
-        © {new Date().getFullYear()} Chess Academy. All rights reserved.
+        © {new Date().getFullYear()} Chess HUB. All rights reserved.
       </Typography>
     </Box>
   );

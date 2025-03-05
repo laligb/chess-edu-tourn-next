@@ -23,7 +23,6 @@ import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import SchoolIcon from "@mui/icons-material/School";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -35,12 +34,10 @@ const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
 
-  // Toggle Sidebar
   const toggleDrawer = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // Top Menu Actions
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setMenuAnchorEl(event.currentTarget);
   };
@@ -50,24 +47,20 @@ const Sidebar = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* Top Bar (AppBar) */}
       <AppBar position="fixed" sx={{ zIndex: 1300 }}>
         <Toolbar>
-          {/* Sidebar Toggle Button */}
           <IconButton color="inherit" edge="start" onClick={toggleDrawer}>
             <MenuIcon />
           </IconButton>
 
-          {/* App Title */}
           <Typography
             variant="h6"
             sx={{ flexGrow: 1, cursor: "pointer" }}
             onClick={() => router.push("/")}
           >
-            Chess Academy
+            Chess Hub
           </Typography>
 
-          {/* Profile, Settings, Logout */}
           <Button color="inherit" onClick={handleMenuClick}>
             <AccountCircleIcon sx={{ mr: 1 }} />
             Profile
@@ -90,7 +83,6 @@ const Sidebar = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar Drawer */}
       <Drawer
         variant="persistent"
         open={sidebarOpen}
@@ -100,14 +92,12 @@ const Sidebar = () => {
           "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
         }}
       >
-        {/* Sidebar Header */}
         <Box sx={{ display: "flex", alignItems: "center", p: 2 }}>
           <Avatar src="/default-avatar.png" sx={{ mr: 2 }} />
           <Typography variant="h6">User Name</Typography>
         </Box>
         <Divider />
 
-        {/* Navigation Items */}
         <List>
           <ListItem disablePadding>
             <ListItemButton onClick={() => router.push("/professors")}>

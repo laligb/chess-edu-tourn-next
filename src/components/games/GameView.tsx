@@ -1,6 +1,6 @@
 "use client";
 
-import ChessGame from "@/components/ChessGame";
+import ChessGame from "@/components/games/ChessGame";
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Box, CircularProgress, Typography } from "@mui/material";
@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { selectGame, selectLoading } from "@/redux/slices/games/gameSlice";
 import { fetchGameThunkById } from "@/redux/slices/games/gameThunk";
-import ChessBoardWithMoves from "@/components/ChessBoardWIthMoves";
+import ChessBoardWithMoves from "@/components/games/ChessBoardWIthMoves";
 
 export default function GameView() {
   const params = useParams() || {};
