@@ -1,5 +1,6 @@
 // /src/types/index.ts
 export type Tournament = {
+  date: Date;
   _id: string;
   title: string;
   players: string[];

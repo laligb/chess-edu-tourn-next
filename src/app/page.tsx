@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "./page.module.css";
 import { useDispatch } from "react-redux";
 import ChatSocket from "@/components/socketComponents/ChatSocket";
 import { checkUserSession } from "@/redux/slices/users/userSlice";
@@ -16,8 +15,8 @@ export default function Home() {
   }, [dispatch]);
 
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
+    <div className={}>
+      <main className={}>
         <br></br>
         <br></br>
         <WelcomePage />
