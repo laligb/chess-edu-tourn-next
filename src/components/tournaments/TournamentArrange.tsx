@@ -1,0 +1,62 @@
+"use client";
+
+import React from "react";
+import TournamentTable from "@/components/TournamentTable";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import TournamentCalendar from "@/components/TournamentCalendar";
+import TournamentStatistics from "@/components/TournamentStatistics";
+import useTournFetches from "@/hooks/useTournFetches";
+
+export default function TournamentArrange() {
+  const { tournaments, userJoinedTournaments, handleJoinWithdraw, loading } =
+    useTournFetches();
+
+  return (
+    <Box sx={{}}>
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 3,
+          fontWeight: "bold",
+          color: "#1976D2",
+          textAlign: "center",
+        }}
+      >
+        Tournament Overview
+      </Typography>
+
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <CircularProgress />
+        </Box>
+      ) : tournaments.length > 0 ? (
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={8}>
+            <TournamentTable
+              tournaments={tournaments}
+              userJoinedTournaments={userJoinedTournaments}
+              handleJoinWithdraw={handleJoinWithdraw}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={4} container spacing={1}>
+            <Grid item xs={12}>
+              <TournamentCalendar tournaments={tournaments} />
+            </Grid>
+            <Grid item xs={12}></Grid>
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <TournamentStatistics tournaments={tournaments} />
+          </Grid>
+        </Grid>
+      ) : (
+        <Typography variant="h6" textAlign="center">
+          No tournaments found.
+        </Typography>
+      )}
+    </Box>
+  );
+}
