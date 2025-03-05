@@ -1,4 +1,3 @@
-// useAuth.tsx (or useAuth.ts)
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

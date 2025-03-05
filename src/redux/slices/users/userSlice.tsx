@@ -68,6 +68,13 @@ export const checkUserSession = createAsyncThunk<User | null>(
             name: user.displayName || "No Name",
             email: user.email || "",
             role: "user",
+            photoUrl: user.photoURL || "",
+            tournaments: [],
+            friends: [],
+            followers: [],
+            following: [],
+            games: [],
+            groups: [],
           });
         } else {
           console.log("❌ No Firebase session found");
