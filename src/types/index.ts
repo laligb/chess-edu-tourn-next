@@ -20,4 +20,11 @@ export type User = {
   name: string;
   email: string;
   role: string;
+  photoUrl: string;
+  tournaments: string[];
+  friends: string[];
+  followers: string[];
+  following: string[];
+  games: string[];
+  groups: string[];
 };

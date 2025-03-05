@@ -24,55 +24,43 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
 import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
+import { User } from "@/types";
 
-interface Professor {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
+export interface ProfessorsUIProps {
+  professors: User[];
+  searchQuery: string;
+  handleClearSearch: () => void;
+  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleOpenChat: (userId: string) => void;
+  openChat: string | null;
+  handleCloseChat: () => void;
+  setMessage: (message: string) => void;
+  message: string;
 }
 
-interface ProfessorsUIProps {
-  professors: Professor[];
-}
-
-const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
-  const [openChat, setOpenChat] = useState<string | null>(null);
-  const [message, setMessage] = useState("");
-  const [ratings, setRatings] = useState<{ [key: string]: number }>({});
-  const [likedProfessors, setLikedProfessors] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleOpenChat = (professorId: string) => {
-    setOpenChat(professorId);
-  };
-
-  const handleCloseChat = () => {
-    setOpenChat(null);
-    setMessage("");
-  };
-
+const ProfessorsUI = ({
+  professors,
+  searchQuery,
+  handleSearchChange,
+  handleClearSearch,
+  handleOpenChat,
+  openChat,
+  handleCloseChat,
+  setMessage,
+  message,
+}: ProfessorsUIProps) => {
   const handleRating = (id: string, rating: number) => {
     setRatings((prev) => ({ ...prev, [id]: rating }));
   };
 
+  const [ratings, setRatings] = useState<{ [key: string]: number }>({});
+  const [likedProfessors, setLikedProfessors] = useState<{
+    [key: string]: boolean;
+  }>({});
+
   const toggleLike = (id: string) => {
     setLikedProfessors((prev) => ({ ...prev, [id]: !prev[id] }));
   };
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const handleClearSearch = () => {
-    setSearchQuery("");
-  };
-
-  const filteredProfessors = professors.filter((professor) =>
-    professor.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <Box
@@ -129,9 +117,9 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
         </Typography>
 
         <Grid container spacing={4} justifyContent="center">
-          {filteredProfessors.length > 0 ? (
-            filteredProfessors.map((professor) => (
-              <Grid item xs={12} sm={6} md={4} key={professor.id}>
+          {professors.length > 0 ? (
+            professors.map((professor) => (
+              <Grid item xs={12} sm={6} md={4} key={professor._id}>
                 <Card
                   sx={{
                     boxShadow: 5,
@@ -144,27 +132,13 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                     component="img"
                     height="200"
                     image={
-                      professor.avatar ||
+                      professor.photoUrl ||
                       "https://randomuser.me/api/portraits/men/75.jpg"
                     }
                     alt={professor.name}
                     sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
                   />
                   <CardContent sx={{ textAlign: "center", p: 3 }}>
-                    <Avatar
-                      src={
-                        professor.avatar ||
-                        "https://randomuser.me/api/portraits/men/75.jpg"
-                      }
-                      sx={{
-                        width: 90,
-                        height: 90,
-                        mx: "auto",
-                        mb: 2,
-                        border: "4px solid white",
-                        boxShadow: 3,
-                      }}
-                    />
                     <Typography variant="h6" fontWeight="bold" color="primary">
                       {professor.name}
                     </Typography>
@@ -172,24 +146,33 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                       {professor.email}
                     </Typography>
 
-                    <Box display="flex" justifyContent="center" mt={1}>
+                    {/* <Box display="flex" justifyContent="center" mt={1}>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <IconButton
                           key={star}
-                          onClick={() => handleRating(professor.id, star)}
+                          onClick={() => handleRating(professor._id, star)}
                         >
-                          {ratings[professor.id] >= star ? (
+                          {ratings[professor._id] >= star ? (
                             <FaStar style={{ color: yellow[700] }} />
                           ) : (
                             <FaRegStar style={{ color: yellow[700] }} />
                           )}
                         </IconButton>
                       ))}
+                    </Box> */}
+                    <Box display="flex" justifyContent="center" mt={1}>
+                      <Typography
+                        variant="h6"
+                        fontWeight="bold"
+                        color="primary"
+                      >
+                        Students: {professor.groups.length}
+                      </Typography>
                     </Box>
 
                     <Box display="flex" justifyContent="center" mt={1}>
-                      <IconButton onClick={() => toggleLike(professor.id)}>
-                        {likedProfessors[professor.id] ? (
+                      <IconButton onClick={() => toggleLike(professor._id)}>
+                        {likedProfessors[professor._id] ? (
                           <FaHeart style={{ color: red[500] }} />
                         ) : (
                           <FaRegHeart style={{ color: red[500] }} />
@@ -202,7 +185,7 @@ const ProfessorsUI = ({ professors }: ProfessorsUIProps) => {
                       size="small"
                       startIcon={<ChatIcon />}
                       sx={{ mt: 2, borderRadius: 20 }}
-                      onClick={() => handleOpenChat(professor.id)}
+                      onClick={() => handleOpenChat(professor._id)}
                     >
                       Chat
                     </Button>
