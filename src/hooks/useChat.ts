@@ -12,7 +12,14 @@ function useChat() {
     setMessage("");
   };
 
-  return { message, openChat, setOpenChat, handleOpenChat, handleCloseChat };
+  return {
+    setMessage,
+    message,
+    openChat,
+    setOpenChat,
+    handleOpenChat,
+    handleCloseChat,
+  };
 }
 
 export default useChat;
