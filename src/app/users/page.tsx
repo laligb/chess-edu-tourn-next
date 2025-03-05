@@ -1,19 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "@/redux/store";
-import { getUsers, UserState } from "@/redux/slices/users/userSlice";
+import { useState } from "react";
+
 import { User } from "@/types";
 import {
   Grid,
-  Card,
-  CardContent,
-  Avatar,
   Typography,
-  CardMedia,
   Box,
-  Paper,
   Button,
   Dialog,
   DialogTitle,
@@ -25,28 +18,20 @@ import {
   Pagination,
 } from "@mui/material";
 
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
 import UserCard from "@/components/cards/UserCard";
 import useUsersFetches from "@/hooks/useUsersFetches";
 import useChat from "@/hooks/useChat";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
+import useSearch from "@/hooks/useSearch";
 
 const UsersPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const usersPerPage = 6;
 
   const { users, loading, error } = useUsersFetches();
   const { message, openChat, handleOpenChat, handleCloseChat } = useChat();
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const handleClearSearch = () => {
-    setSearchQuery("");
-  };
+  const { searchQuery, handleSearchChange, handleClearSearch } = useSearch();
 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase())
