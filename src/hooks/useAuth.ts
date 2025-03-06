@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { logoutUser } from "@/redux/slices/users/userSlice"; // Assuming logoutUser is an action in your slice
+import { logoutUser } from "@/redux/slices/users/userSlice";
 
 function useAuth() {
   const dispatch = useDispatch();
