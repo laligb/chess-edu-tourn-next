@@ -6,7 +6,7 @@ console.log("🔄 Attempting to connect to WebSocket...");
 
 const isBrowser = typeof window !== "undefined";
 const socket: ReturnType<typeof io> | null = isBrowser
-  ? io("http://localhost:3000", {
+  ? io("http://localhost:3000/chat", {
       transports: ["websocket"],
       reconnection: true,
     })

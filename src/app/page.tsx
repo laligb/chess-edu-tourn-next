@@ -21,7 +21,6 @@ export default function Home() {
         <br></br>
         <br></br>
         <WelcomePage />
-        {/* <ChatSocket /> */}
       </main>
     </div>
   );

@@ -73,12 +73,7 @@ export default function TournamentTable({
               >
                 Games
               </TableCell>
-              <TableCell
-                align="center"
-                sx={{ color: "white", fontWeight: "bold" }}
-              >
-                Actions
-              </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ color: "white", fontWeight: "bold" }}
@@ -125,20 +120,7 @@ export default function TournamentTable({
                     {tournament.games.length}
                   </Box>
                 </TableCell>
-                <TableCell align="center">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<VisibilityIcon />}
-                    onClick={() =>
-                      console.log(
-                        `Viewing tournament with ID: ${tournament._id}`
-                      )
-                    }
-                  >
-                    View
-                  </Button>
-                </TableCell>
+
                 <TableCell align="center">
                   <Button
                     variant="contained"

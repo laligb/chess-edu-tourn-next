@@ -27,20 +27,15 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
-import { Person, PersonPinCircleOutlined } from "@mui/icons-material";
+import { Person } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
   const { user, handleLogout } = useAuth();
-
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
-
-  if (!user) {
-    return <Box>Redirecting to login...</Box>;
-  }
 
   const toggleDrawer = () => {
     setSidebarOpen(!sidebarOpen);
@@ -69,10 +64,19 @@ const Sidebar = () => {
             Chess Hub
           </Typography>
 
-          <Button color="inherit" onClick={handleMenuClick}>
-            <AccountCircleIcon sx={{ mr: 1 }} />
-            Profile
-          </Button>
+          {/* Profile or Login Button */}
+          {user ? (
+            <Button color="inherit" onClick={handleMenuClick}>
+              <AccountCircleIcon sx={{ mr: 1 }} />
+              Profile
+            </Button>
+          ) : (
+            <Button color="inherit" onClick={() => router.push("/login")}>
+              Login
+            </Button>
+          )}
+
+          {/* Profile Menu */}
           <Menu
             anchorEl={menuAnchorEl}
             open={Boolean(menuAnchorEl)}
@@ -102,7 +106,7 @@ const Sidebar = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", p: 2 }}>
           <Avatar src="/default-avatar.png" sx={{ mr: 2 }} />
-          <Typography variant="h6">User Name</Typography>
+          <Typography variant="h6">{user ? user.name : "Guest"}</Typography>
         </Box>
         <Divider />
 

@@ -20,10 +20,13 @@ const ChatSocket = () => {
       console.log("✅ Connected to WebSocket server:", socket?.id);
     });
 
-    socket.off("receiveMessage");
     socket.on("receiveMessage", (payload: MessagePayload) => {
       console.log("📩 Received Message:", payload.message);
-      setMessages((prev) => [...prev, payload]);
+      setMessages((prev) => {
+        const updatedMessages = [...prev, payload];
+        console.log("Updated Messages:", updatedMessages);
+        return updatedMessages;
+      });
     });
 
     return () => {
@@ -48,13 +51,17 @@ const ChatSocket = () => {
 
   return (
     <div className="chat-container">
-      <h2 style={{ color: "black" }}>WebSocket Chat Test</h2>
+      <h2 style={{ color: "black" }}>Chat</h2>
       <div className="chat-box">
-        {messages.map((msg, index) => (
-          <p key={index} className="chat-message" style={{ color: "black" }}>
-            🗨 {msg.message}
-          </p>
-        ))}
+        {messages.length === 0 ? (
+          <p>No messages yet.</p>
+        ) : (
+          messages.map((msg, index) => (
+            <p key={index} className="chat-message" style={{ color: "black" }}>
+              🗨 {msg.message}
+            </p>
+          ))
+        )}
       </div>
       <input
         type="text"
@@ -74,7 +81,6 @@ const ChatSocket = () => {
           text-align: center;
         }
         .chat-box {
-          height: 200px;
           overflow-y: auto;
           border: 1px solid #ddd;
           padding: 10px;

@@ -1,22 +1,35 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { AppDispatch, type RootState } from "@/redux/store";
-import { logoutUser } from "@/redux/slices/users/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { logoutUser } from "@/redux/slices/users/userSlice"; // Assuming logoutUser is an action in your slice
 
 function useAuth() {
-  const [isClient, setIsClient] = useState(false);
-  const loading = useSelector((state: RootState) => state.user.loading);
+  const dispatch = useDispatch();
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  const [isClient, setIsClient] = useState(false);
   const user = useSelector((state: RootState) => state.user.user);
+  const loading = useSelector((state: RootState) => state.user.loading);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (isClient && !loading && !user) {
+    if (
+      isClient &&
+      !loading &&
+      user &&
+      window.location.pathname === "/signup"
+    ) {
+      router.push("/profile");
+    } else if (
+      isClient &&
+      !loading &&
+      !user &&
+      window.location.pathname !== "/login" &&
+      window.location.pathname !== "/signup"
+    ) {
       router.push("/login");
     }
   }, [user, loading, router, isClient]);
@@ -26,7 +39,7 @@ function useAuth() {
     router.push("/login");
   };
 
-  return { isClient, loading, user, handleLogout };
+  return { user, loading, handleLogout };
 }
 
 export default useAuth;

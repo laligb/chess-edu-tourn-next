@@ -57,8 +57,8 @@ export default function SignInUI({
                 required
                 fullWidth
                 variant="outlined"
-                value={email} // ✅ Controlled input
-                onChange={(e) => setEmail(e.target.value)} // ✅ Pass event handler
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </MUI.FormControl>
             <MUI.FormControl>
@@ -71,8 +71,8 @@ export default function SignInUI({
                 required
                 fullWidth
                 variant="outlined"
-                value={password} // ✅ Controlled input
-                onChange={(e) => setPassword(e.target.value)} // ✅ Pass event handler
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </MUI.FormControl>
             <MUI.FormControlLabel
