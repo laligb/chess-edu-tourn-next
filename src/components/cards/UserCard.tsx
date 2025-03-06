@@ -5,11 +5,26 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  Box,
+  IconButton,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import ChatIcon from "@mui/icons-material/Chat";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { purple } from "@mui/material/colors";
+import { useState } from "react";
 
 function UserCard({ user, handleOpenChat }) {
+  const [liked, setLiked] = useState(false);
+
+  const handleLikeToggle = () => {
+    setLiked(!liked);
+  };
+
+  const handleInviteFriend = () => {
+    console.log(`Sending friendship request to ${user.name}`);
+  };
+
   return (
     <Card sx={{ boxShadow: 5, borderRadius: 3 }}>
       <CardMedia
@@ -43,19 +58,35 @@ function UserCard({ user, handleOpenChat }) {
         </Typography>
 
         <Box display="flex" justifyContent="center" mt={1}>
-          <Button variant="contained" size="small" sx={{ marginRight: 1 }}>
-            Follow
-          </Button>
-          <Button variant="contained" size="small" sx={{ marginRight: 1 }}>
-            Send Friendship
-          </Button>
+          <IconButton onClick={handleLikeToggle}>
+            {liked ? (
+              <FaHeart style={{ color: "red", fontSize: "24px" }} />
+            ) : (
+              <FaRegHeart style={{ color: "red", fontSize: "24px" }} />
+            )}
+          </IconButton>
+
+          <IconButton onClick={handleInviteFriend} sx={{ ml: 2 }}>
+            <PersonAddIcon style={{ color: "#1976D2", fontSize: "24px" }} />
+          </IconButton>
+
+          <IconButton onClick={() => handleOpenChat(user._id)} sx={{ ml: 2 }}>
+            <ChatIcon style={{ color: "#1976D2", fontSize: "24px" }} />
+          </IconButton>
+        </Box>
+
+        <Box display="flex" justifyContent="center" mt={2}>
           <Button
             variant="contained"
             size="small"
-            startIcon={<ChatIcon />}
-            onClick={() => handleOpenChat(user._id)}
+            sx={{
+              backgroundColor: purple[500],
+              "&:hover": {
+                backgroundColor: purple[700],
+              },
+            }}
           >
-            Chat
+            Play Chess Game
           </Button>
         </Box>
       </CardContent>

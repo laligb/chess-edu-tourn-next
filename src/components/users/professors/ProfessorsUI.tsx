@@ -7,18 +7,12 @@ import {
   Box,
   Paper,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
   TextField,
-  DialogActions,
   IconButton,
   InputAdornment,
 } from "@mui/material";
 import { red } from "@mui/material/colors";
-
 import ChatIcon from "@mui/icons-material/Chat";
-import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
@@ -30,11 +24,6 @@ export interface ProfessorsUIProps {
   searchQuery: string;
   handleClearSearch: () => void;
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleOpenChat: (userId: string) => void;
-  openChat: string | null;
-  handleCloseChat: () => void;
-  setMessage: (message: string) => void;
-  message: string;
   getStudentCount: (professorId: string) => number;
   groups: Group[];
 }
@@ -44,11 +33,6 @@ const ProfessorsUI = ({
   searchQuery,
   handleSearchChange,
   handleClearSearch,
-  handleOpenChat,
-  openChat,
-  handleCloseChat,
-  setMessage,
-  message,
   getStudentCount,
   groups,
 }: ProfessorsUIProps) => {
@@ -56,8 +40,21 @@ const ProfessorsUI = ({
     [key: string]: boolean;
   }>({});
 
+  const [message, setMessage] = useState("");
+
   const toggleLike = (id: string) => {
     setLikedProfessors((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const sendMessage = (professorEmail: string) => {
+    if (!message.trim()) return;
+
+    const mailtoLink = `mailto:${professorEmail}?subject=Message%20from%20Student&body=${encodeURIComponent(message)}`;
+
+    console.log("Opening mailto link: ", mailtoLink);
+    window.open(mailtoLink, "_self");
+
+    setMessage("");
   };
 
   return (
@@ -172,9 +169,9 @@ const ProfessorsUI = ({
                       size="small"
                       startIcon={<ChatIcon />}
                       sx={{ mt: 2, borderRadius: 20 }}
-                      onClick={() => handleOpenChat(professor._id)}
+                      onClick={() => sendMessage(professor.email)}
                     >
-                      Chat
+                      Send Email
                     </Button>
                   </CardContent>
                 </Card>
@@ -187,45 +184,6 @@ const ProfessorsUI = ({
           )}
         </Grid>
       </Paper>
-
-      <Dialog
-        open={!!openChat}
-        onClose={handleCloseChat}
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          Chat with {professors.find((p) => p._id === openChat)?.name}
-          <IconButton onClick={handleCloseChat}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            multiline
-            minRows={3}
-            label="Type your message..."
-            variant="outlined"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseChat} color="error">
-            Cancel
-          </Button>
-          <Button variant="contained" disabled={!message.trim()}>
-            Send Message
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 };

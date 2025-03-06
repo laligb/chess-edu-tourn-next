@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import ProfessorsUI from "./ProfessorsUI";
 import { useDispatch, useSelector } from "react-redux";

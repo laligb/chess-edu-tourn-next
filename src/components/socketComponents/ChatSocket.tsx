@@ -66,7 +66,6 @@ const ChatSocket = () => {
 
       <style jsx>{`
         .chat-container {
-          max-width: 400px;
           margin: auto;
           padding: 10px;
           border: 1px solid #ccc;

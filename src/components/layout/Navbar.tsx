@@ -27,6 +27,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
+import { Person, PersonPinCircleOutlined } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -129,7 +130,16 @@ const Sidebar = () => {
               <ListItemIcon>
                 <SportsEsportsIcon />
               </ListItemIcon>
-              <ListItemText primary="Games" />
+              <ListItemText primary="Chess Games" />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => router.push("/users")}>
+              <ListItemIcon>
+                <Person />
+              </ListItemIcon>
+              <ListItemText primary="Players" />
             </ListItemButton>
           </ListItem>
         </List>
