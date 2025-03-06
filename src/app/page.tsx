@@ -2,7 +2,6 @@
 
 import styles from "./page.module.css";
 import { useDispatch } from "react-redux";
-// import ChatSocket from "@/components/socketComponents/ChatSocket";
 import { checkUserSession } from "@/redux/slices/users/userSlice";
 import { useEffect } from "react";
 import { AppDispatch } from "@/redux/store";

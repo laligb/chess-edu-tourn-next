@@ -7,20 +7,25 @@ import { Chessboard } from "react-chessboard";
 
 interface ChessGameProps {
   pgn: string;
+  fen: string; // Add fen prop to update position dynamically
 }
 
-export default function ChessView({ pgn }: ChessGameProps) {
+export default function ChessView({ pgn, fen }: ChessGameProps) {
   const [game, setGame] = useState(new Chess());
 
   useEffect(() => {
     if (pgn) {
-      console.log("PGN Loaded:", pgn);
       const chess = new Chess();
       chess.loadPgn(pgn);
       setGame(chess);
-      console.log("FEN CURRENT:", game.fen);
     }
   }, [pgn]);
+
+  useEffect(() => {
+    if (fen) {
+      setGame(new Chess(fen));
+    }
+  }, [fen]);
 
   return (
     <Box>

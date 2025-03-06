@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chess Academy",
+  title: "Chess Hub",
   description: "Learn, Play, and Compete with the Best Professors",
 };
 

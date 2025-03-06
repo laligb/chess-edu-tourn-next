@@ -22,7 +22,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     >
       <Container>
         <Typography variant="h2" fontWeight="bold">
-          Welcome to Chess Academy 🎓
+          Welcome to Chess Hub🎓
         </Typography>
         <Typography variant="h5" sx={{ mt: 2 }}>
           Learn, Play, and Compete with the Best Professors

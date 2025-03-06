@@ -11,7 +11,6 @@ import {
 export const WelcomePage = () => {
   return (
     <div style={{ padding: "20px" }}>
-      {/* Heading with blue color */}
       <Typography variant="h1" color="primary" gutterBottom>
         Welcome to the Chess Hub
       </Typography>
