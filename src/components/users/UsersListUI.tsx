@@ -20,6 +20,7 @@ import UserCard from "@/components/cards/UserCard";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useState } from "react";
 
 const UsersListUI = ({
   loading,

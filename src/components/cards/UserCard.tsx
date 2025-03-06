@@ -10,18 +10,21 @@ import {
 } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import CheckIcon from "@mui/icons-material/Check"; // The icon after friend request is sent
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { purple } from "@mui/material/colors";
 import { useState } from "react";
 
 function UserCard({ user, handleOpenChat }) {
   const [liked, setLiked] = useState(false);
+  const [friendRequestSent, setFriendRequestSent] = useState(false); // Track the friend request status
 
   const handleLikeToggle = () => {
     setLiked(!liked);
   };
 
   const handleInviteFriend = () => {
+    setFriendRequestSent(true); // Mark the friend request as sent
     console.log(`Sending friendship request to ${user.name}`);
   };
 
@@ -66,8 +69,16 @@ function UserCard({ user, handleOpenChat }) {
             )}
           </IconButton>
 
-          <IconButton onClick={handleInviteFriend} sx={{ ml: 2 }}>
-            <PersonAddIcon style={{ color: "#1976D2", fontSize: "24px" }} />
+          <IconButton
+            onClick={handleInviteFriend}
+            sx={{ ml: 2 }}
+            disabled={friendRequestSent} // Disable the button once the request is sent
+          >
+            {friendRequestSent ? (
+              <CheckIcon style={{ color: "#1976D2", fontSize: "24px" }} />
+            ) : (
+              <PersonAddIcon style={{ color: "#1976D2", fontSize: "24px" }} />
+            )}
           </IconButton>
 
           <IconButton onClick={() => handleOpenChat(user._id)} sx={{ ml: 2 }}>
