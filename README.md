@@ -46,19 +46,23 @@ Frontend project: [Chess Edu Tourn Next](https://github.com/laligb/chess-edu-tou
    npm install
    ```
 
-3. Create a `.env.example` file in the root directory and add the following:
+3. ### Create a `.env.local` file:
 
-   ```env
-   NEXT_PUBLIC_API_URL=http://localhost:3000
-   ```
+In the root directory, copy the `env.example` file to `.env.local`. This will provide you with the necessary environment variables to run the project locally.
 
-   After creating `.env.example`, copy it to `.env`, remove the `.example` extension, and add the corresponding keys (e.g., API URL, Firebase credentials, etc.).
+```bash
+cp env.example .env.local
+```
+
+and add the corresponding keys (e.g., API URL, Firebase credentials, etc.).
 
 4. Start the development server:
 
    ```bash
    npm run dev
    ```
+
+```
 
 5. The frontend will be available at `http://localhost:3001`. Ensure the API is running locally at `localhost:3000` to fetch and push data.
 
@@ -79,3 +83,4 @@ Ensure that both the API (`chess-education-api`) and the frontend (`chess-edu-to
 3. Data will be pushed to the API, which should be running on `http://localhost:3000`.
 
 For further details, refer to the frontend code and how API calls are made using Axios.
+```
