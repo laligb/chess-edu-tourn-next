@@ -7,7 +7,7 @@ import { Chessboard } from "react-chessboard";
 
 interface ChessGameProps {
   pgn: string;
-  fen: string; // Add fen prop to update position dynamically
+  fen: string;
 }
 
 export default function ChessView({ pgn, fen }: ChessGameProps) {

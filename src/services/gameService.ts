@@ -2,11 +2,10 @@ import { apiClient } from "./apiClient";
 import { fetchUserById } from "./userService";
 
 export const fetchGames = async () => {
-  const { data: games } = await apiClient.get("/games"); // ✅ Only one API request
+  const { data: games } = await apiClient.get("/games");
 
-  console.log("Raw API response:", games); // ✅ Only logs once
+  console.log("Raw API response:", games);
 
-  // ✅ Fetch player details efficiently using Promise.all()
   const playersMap = new Map();
 
   return Promise.all(
@@ -38,7 +37,6 @@ export const fetchGames = async () => {
 export const fetchGameById = async (id: string) => {
   const { data } = await apiClient.get(`/games/${id}`);
 
-  // ✅ Fetch both players in parallel
   const [playerOne, playerTwo] = await Promise.all([
     fetchUserById(data.playerOne),
     fetchUserById(data.playerTwo),

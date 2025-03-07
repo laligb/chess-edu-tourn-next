@@ -41,7 +41,7 @@ const useChat = () => {
   const handleOpenChat = (professorId: string) => {
     setOpenChat(professorId);
     setMessages([]);
-    setNotifications((prev) => prev.filter((id) => id !== professorId)); // Mark the notification as read
+    setNotifications((prev) => prev.filter((id) => id !== professorId));
   };
 
   const handleCloseChat = () => {
