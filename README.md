@@ -62,8 +62,6 @@ and add the corresponding keys (e.g., API URL, Firebase credentials, etc.).
    npm run dev
    ```
 
-```
-
 5. The frontend will be available at `http://localhost:3001`. Ensure the API is running locally at `localhost:3000` to fetch and push data.
 
 ## 🎮 How to Watch Online Games
@@ -83,4 +81,3 @@ Ensure that both the API (`chess-education-api`) and the frontend (`chess-edu-to
 3. Data will be pushed to the API, which should be running on `http://localhost:3000`.
 
 For further details, refer to the frontend code and how API calls are made using Axios.
-```
