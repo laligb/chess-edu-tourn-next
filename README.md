@@ -46,7 +46,7 @@ Frontend project: [Chess Edu Tourn Next](https://github.com/laligb/chess-edu-tou
    npm install
    ```
 
-3. ### Create a `.env.local` file:
+3. Create a `.env.local` file:
 
 In the root directory, copy the `env.example` file to `.env.local`. This will provide you with the necessary environment variables to run the project locally.
 
