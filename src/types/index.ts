@@ -5,6 +5,10 @@ export type Tournament = {
   title: string;
   players: string[];
   games: string[];
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
 };
 
 export type Game = {
