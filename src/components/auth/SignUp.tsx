@@ -66,9 +66,10 @@ export default function SignUp() {
         );
         router.push("/profile");
       }
-    } catch (error: any) {
-      console.error("❌ Signup Failed:", error);
-      setError(error.message || "Signup failed. Please try again.");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
     }
   };
 
