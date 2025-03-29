@@ -2,6 +2,7 @@ import {
   fetchUsers,
   fetchUserById,
   firebaseLogin,
+  fetchCurrentUser as fetchCurrentUserService,
 } from "@/services/userService";
 import { User } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -33,6 +34,21 @@ export const getUsers = createAsyncThunk("user/fetchUsers", fetchUsers);
 export const getUserById = createAsyncThunk(
   "user/fetchUserById",
   fetchUserById
+);
+
+export const fetchCurrentUser = createAsyncThunk(
+  "user/fetchCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const user = await fetchCurrentUserService();
+      return user;
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Current user error");
+    }
+  }
 );
 
 export const loginUser = createAsyncThunk(
