@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import GroupIcon from "@mui/icons-material/Group";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+
 import { Tournament } from "@/types";
 
 type TournamentTableProps = {
