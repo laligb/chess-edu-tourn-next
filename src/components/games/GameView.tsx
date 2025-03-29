@@ -20,7 +20,9 @@ export default function GameView() {
   const loading = useSelector(selectLoading);
 
   useEffect(() => {
-    dispatch(fetchGameThunkById(id));
+    if (id) {
+      dispatch(fetchGameThunkById(id));
+    }
   }, [dispatch, id]);
 
   return (
