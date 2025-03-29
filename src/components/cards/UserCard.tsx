@@ -14,8 +14,14 @@ import CheckIcon from "@mui/icons-material/Check";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { purple } from "@mui/material/colors";
 import { useState } from "react";
+import { User } from "@/types";
 
-function UserCard({ user, handleOpenChat }) {
+type UserCardProps = {
+  user: User;
+  handleOpenChat: (userId: string) => void;
+};
+
+function UserCard({ user, handleOpenChat }: UserCardProps) {
   const [liked, setLiked] = useState(false);
   const [friendRequestSent, setFriendRequestSent] = useState(false);
 
