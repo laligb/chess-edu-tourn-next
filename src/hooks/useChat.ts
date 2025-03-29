@@ -24,14 +24,14 @@ const useChat = () => {
     });
 
     return () => {
-      socket.off("receiveMessage");
+      socket?.off("receiveMessage");
     };
   }, [openChat]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
       const payload = { message, userId: openChat };
-      socket.emit("sendMessage", payload, (response) => {
+      socket?.emit("sendMessage", payload, (response: unknown) => {
         console.log("Message sent:", response);
         setMessage("");
       });

@@ -94,7 +94,7 @@ export default function TournamentTable({
                 <TableCell component="th" scope="row">
                   <Typography fontWeight="bold">{tournament.title}</Typography>
                 </TableCell>
-                <TableCell>{tournament.location.name}</TableCell>
+                <TableCell>{tournament.location?.name}</TableCell>
                 <TableCell>
                   {new Date(tournament.date).toLocaleDateString()}
                 </TableCell>

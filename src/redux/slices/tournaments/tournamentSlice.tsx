@@ -1,6 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { Tournament } from "@/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
+interface TournamentState {
+  tournaments: Tournament[];
+  userJoinedTournaments: string[];
+}
+
+const initialState: TournamentState = {
   tournaments: [],
   userJoinedTournaments: [],
 };
@@ -9,13 +15,13 @@ const tournamentSlice = createSlice({
   name: "tournaments",
   initialState,
   reducers: {
-    setTournaments: (state, action) => {
+    setTournaments: (state, action: PayloadAction<Tournament[]>) => {
       state.tournaments = action.payload;
     },
-    joinTournament: (state, action) => {
+    joinTournament: (state, action: PayloadAction<string>) => {
       state.userJoinedTournaments.push(action.payload);
     },
-    withdrawTournament: (state, action) => {
+    withdrawTournament: (state, action: PayloadAction<string>) => {
       state.userJoinedTournaments = state.userJoinedTournaments.filter(
         (id) => id !== action.payload
       );
@@ -26,9 +32,10 @@ const tournamentSlice = createSlice({
 export const { setTournaments, joinTournament, withdrawTournament } =
   tournamentSlice.actions;
 
-export const selectTournaments = (state) =>
+export const selectTournaments = (state: { tournaments: TournamentState }) =>
   state.tournaments?.tournaments || [];
-export const selectUserJoinedTournaments = (state) =>
-  state.tournaments?.userJoinedTournaments || [];
+export const selectUserJoinedTournaments = (state: {
+  tournaments: TournamentState;
+}) => state.tournaments?.userJoinedTournaments || [];
 
 export default tournamentSlice.reducer;

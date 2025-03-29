@@ -8,6 +8,7 @@ export type Tournament = {
   location?: {
     latitude: number;
     longitude: number;
+    name: string;
   };
 };
 

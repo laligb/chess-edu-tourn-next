@@ -20,6 +20,29 @@ import UserCard from "@/components/cards/UserCard";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
+
+interface UsersListUIProps {
+  loading: boolean;
+  error: string | null;
+  searchQuery: string;
+  handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleClearSearch: () => void;
+  usersToShow: User[];
+  handleOpenChat: (userId: string) => void;
+  filteredUsers: User[];
+  usersPerPage: number;
+  page: number;
+  handlePaginationChange: (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => void;
+  openChat: string | null;
+  handleCloseChat: () => void;
+  users: User[];
+  message: string;
+  setMessage: Dispatch<SetStateAction<string>>;
+}
 
 const UsersListUI = ({
   loading,
@@ -38,7 +61,7 @@ const UsersListUI = ({
   users,
   message,
   setMessage,
-}) => {
+}: UsersListUIProps) => {
   return (
     <div style={{ padding: "20px" }}>
       <Typography variant="h2" color="primary" gutterBottom>

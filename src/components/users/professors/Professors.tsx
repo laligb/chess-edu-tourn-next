@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import ProfessorsUI from "./ProfessorsUI";
 import { useDispatch, useSelector } from "react-redux";
-import useChat from "@/hooks/useChat";
+// import useChat from "@/hooks/useChat";
 import { Group, User } from "@/types";
 import { getUsers } from "@/redux/slices/users/userSlice";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import { getGroups } from "@/redux/slices/groups/groupSlice";
 
 const Professors = () => {
   const [isClient, setIsClient] = useState(false);
-  const { setMessage, message, openChat, handleOpenChat, handleCloseChat } =
-    useChat();
+  // const { setMessage, message, openChat, handleOpenChat, handleCloseChat } =
+  //   useChat();
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
   const users = useSelector((state: RootState) => state.user.users);
   const groups = useSelector(
     (state: RootState) => state.group.groups
@@ -83,11 +84,11 @@ const Professors = () => {
       searchQuery={searchQuery}
       handleClearSearch={handleClearSearch}
       handleSearchChange={handleSearchChange}
-      handleOpenChat={handleOpenChat}
-      openChat={openChat}
-      handleCloseChat={handleCloseChat}
-      setMessage={setMessage}
-      message={message}
+      // handleOpenChat={handleOpenChat}
+      //openChat={openChat}
+      //handleCloseChat={handleCloseChat}
+      // setMessage={setMessage}
+      //message={message}
       getStudentCount={getStudentCount}
       groups={groups}
     />

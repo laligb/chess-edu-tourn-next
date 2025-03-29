@@ -116,12 +116,20 @@ const userSlice = createSlice({
 
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload?.user) {
+        const user = action.payload;
+        if (user) {
           const userData = {
-            _id: action.payload.user._id,
-            name: action.payload.user.name,
-            email: action.payload.user.email,
-            role: action.payload.user.role,
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            photoUrl: user.photoUrl,
+            tournaments: user.tournaments,
+            friends: user.friends,
+            followers: user.followers,
+            following: user.following,
+            games: user.games,
+            groups: user.groups,
           };
           state.user = userData;
           localStorage.setItem("user", JSON.stringify(userData));
