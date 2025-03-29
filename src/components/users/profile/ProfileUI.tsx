@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   Typography,
@@ -17,6 +19,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import SchoolIcon from "@mui/icons-material/School";
 import { getRoleColor } from "@/styles/roleColors";
+import { useEffect } from "react";
 
 interface ProfileUIProps {
   user: {
@@ -28,6 +31,9 @@ interface ProfileUIProps {
 }
 
 const ProfileUI = ({ user, onLogout }: ProfileUIProps) => {
+  useEffect(() => {
+    console.log("current user", user);
+  }, [user]);
   return (
     <Box
       display="flex"
@@ -69,7 +75,10 @@ const ProfileUI = ({ user, onLogout }: ProfileUIProps) => {
             {user.email || "johndoe@example.com"}
           </Typography>
           <Chip
-            label={user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+            label={
+              (user?.role || "user").charAt(0).toUpperCase() +
+              (user?.role || "user").slice(1)
+            }
             sx={{
               mt: 1,
               bgcolor: getRoleColor(user.role),

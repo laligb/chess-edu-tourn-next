@@ -113,6 +113,18 @@ export const firebaseSignup = async (
 };
 
 export const fetchCurrentUser = async () => {
-  const response = await apiClient.get("/users/me");
+  const token = await auth.currentUser?.getIdToken();
+
+  if (!token) {
+    throw new Error("No Firebase token found");
+  }
+
+  const response = await apiClient.get("/users/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log("✅ Fetched current user:", response.data);
   return response.data;
 };

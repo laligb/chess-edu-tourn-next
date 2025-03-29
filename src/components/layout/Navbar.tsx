@@ -24,7 +24,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
 import { Person } from "@mui/icons-material";
@@ -48,6 +48,12 @@ const Sidebar = () => {
     setMenuAnchorEl(null);
   };
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" sx={{ zIndex: 1300 }}>
@@ -65,16 +71,16 @@ const Sidebar = () => {
           </Typography>
 
           {/* Profile or Login Button */}
-          {user ? (
+          {isClient && user ? (
             <Button color="inherit" onClick={handleMenuClick}>
               <AccountCircleIcon sx={{ mr: 1 }} />
               Profile
             </Button>
-          ) : (
+          ) : isClient ? (
             <Button color="inherit" onClick={() => router.push("/login")}>
               Login
             </Button>
-          )}
+          ) : null}
 
           {/* Profile Menu */}
           <Menu
@@ -106,7 +112,9 @@ const Sidebar = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", p: 2 }}>
           <Avatar src="/default-avatar.png" sx={{ mr: 2 }} />
-          <Typography variant="h6">{user ? user.name : "Guest"}</Typography>
+          <Typography variant="h6">
+            {isClient && user ? user.name : "Guest"}
+          </Typography>
         </Box>
         <Divider />
 

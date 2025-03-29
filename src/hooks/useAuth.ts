@@ -1,11 +1,13 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import { logoutUser } from "@/redux/slices/users/userSlice";
+import { AppDispatch, RootState } from "@/redux/store";
+import { fetchCurrentUser, logoutUser } from "@/redux/slices/users/userSlice";
 
 function useAuth() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
   const user = useSelector((state: RootState) => state.user.user);
@@ -14,6 +16,12 @@ function useAuth() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (isClient) {
+      dispatch(fetchCurrentUser());
+    }
+  }, [isClient, dispatch]);
 
   useEffect(() => {
     if (
