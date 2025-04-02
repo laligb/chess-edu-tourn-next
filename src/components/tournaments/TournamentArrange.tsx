@@ -33,7 +33,7 @@ export default function TournamentArrange() {
         </Box>
       ) : tournaments.length > 0 ? (
         <Grid container spacing={4}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={12}>
             <TournamentTable
               tournaments={tournaments}
               userJoinedTournaments={userJoinedTournaments}
@@ -42,9 +42,9 @@ export default function TournamentArrange() {
           </Grid>
 
           <Grid item xs={12} md={4} container spacing={1}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TournamentCalendar tournaments={tournaments} />
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid item xs={12} md={12}>
             <TournamentStatistics tournaments={tournaments} />

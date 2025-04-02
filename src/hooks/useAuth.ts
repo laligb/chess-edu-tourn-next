@@ -6,7 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { fetchCurrentUser, logoutUser } from "@/redux/slices/users/userSlice";
 
-function useAuth() {
+type UseAuthOptions = {
+  requireAuth?: boolean;
+};
+
+function useAuth({ requireAuth = false }: UseAuthOptions = {}) {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
@@ -24,23 +28,20 @@ function useAuth() {
   }, [isClient, dispatch]);
 
   useEffect(() => {
-    if (
-      isClient &&
-      !loading &&
-      user &&
-      window.location.pathname === "/signup"
-    ) {
+    if (!isClient || loading) return;
+
+    // 🚫 If user is already logged in and visits /signup, redirect to /profile
+    if (user && window.location.pathname === "/signup") {
       router.push("/profile");
-    } else if (
-      isClient &&
-      !loading &&
-      !user &&
-      window.location.pathname !== "/login" &&
-      window.location.pathname !== "/signup"
-    ) {
+    }
+
+    // 🚫 If this is a protected page (requireAuth = true) and user is not logged in, redirect to /login
+    if (requireAuth && !user) {
       router.push("/login");
     }
-  }, [user, loading, router, isClient]);
+
+    // ✅ Otherwise, no redirection happens (good for public pages)
+  }, [user, loading, router, isClient, requireAuth]);
 
   const handleLogout = () => {
     dispatch(logoutUser());
