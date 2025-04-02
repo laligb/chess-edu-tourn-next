@@ -6,7 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import TournamentCalendar from "@/components/tournaments/TournamentCalendar";
+// import TournamentCalendar from "@/components/tournaments/TournamentCalendar";
 import TournamentStatistics from "@/components/tournaments/TournamentStatistics";
 import useTournFetches from "@/hooks/useTournFetches";
 
